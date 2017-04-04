@@ -35,7 +35,7 @@ for ip in $IPS;do
 done
 
 curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
-sudo cp kubernetes/platforms/linux/amd64/kubectl /usr/local/bin
+sudo cp kubectl /usr/local/bin
 sudo chmod +x /usr/local/bin/kubectl
 
 kubectl config set-cluster ${ENVIRONMENT} --server=https://${KUBERNETES_SERVICE_HOST} --certificate-authority=/etc/secret-volume/kubectl-ca
