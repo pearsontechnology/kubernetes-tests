@@ -34,9 +34,9 @@ for ip in $IPS;do
   ssh-keyscan $ip >> ~/.ssh/known_hosts > /dev/null 2>&1
 done
 
-curl -L -k -s -o kubernetes.tar.gz https://github.com/kubernetes/kubernetes/releases/download/${KUBERNETES_VERSION}/kubernetes.tar.gz
-tar zxf kubernetes.tar.gz
+curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 sudo cp kubernetes/platforms/linux/amd64/kubectl /usr/local/bin
+sudo chmod +x /usr/local/bin/kubectl
 
 kubectl config set-cluster ${ENVIRONMENT} --server=https://${KUBERNETES_SERVICE_HOST} --certificate-authority=/etc/secret-volume/kubectl-ca
 kubectl config set-credentials ${ENVIRONMENT}-admin --client-key=/etc/secret-volume/kubectl-client-key --username=admin --password=${KUBE_PASS}
