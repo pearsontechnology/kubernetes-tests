@@ -95,46 +95,46 @@ describe file('/etc/pki/ca-trust/source/anchors') do
   its('type') {should match(%r{ca.pem}) }
 end
 
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{admin.csr}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{admin-key.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{admin.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{bitesize.key}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{bitesizessl.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{ca-key.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{ca.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{ca.srl}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{docker-registry.csr}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{docker-registry-key.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{docker-registry.pem}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{git.key}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{openssl.cnf.tmpl}) }
 end
-describe file(' /root/.ssh/files/kubernets/ssl') do
+describe file('/root/.ssh/files/kubernets/ssl') do
   its('type') {should match(%r{TrustedSecureCertificateAuthority5.pem}) }
 end
 
