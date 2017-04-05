@@ -34,6 +34,8 @@ for ip in $IPS;do
   ssh-keyscan $ip >> ~/.ssh/known_hosts > /dev/null 2>&1
 done
 
+echo "KUBERNETES_VERSION: $KUBERNETES_VERSION"
+
 curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 sudo cp kubectl /usr/local/bin
 sudo chmod +x /usr/local/bin/kubectl
