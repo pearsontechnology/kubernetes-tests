@@ -22,7 +22,7 @@ spec:
           secretName: test-runner-secrets
       containers:
       - name: testexecutor
-        image: bitesize-registry.default.svc.cluster.local:5000/test-runner/test-executor-app:1.0.0-20170405104127
+        image: bitesize-registry.default.svc.cluster.local:5000/test-runner/test-executor-app:1.0.0-20170405113455
         volumeMounts:
         - mountPath: /etc/secret-volume
           name: secret-volume
