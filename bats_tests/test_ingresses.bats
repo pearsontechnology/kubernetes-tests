@@ -6,10 +6,6 @@ load helpers
 
 # Ingress
 
-@test "consul ingress" {
-  kubectl get ing consul --namespace=kube-system --no-headers
-}
-
 @test "vault ingress" {
   kubectl get ing vault --namespace=kube-system --no-headers
 }
