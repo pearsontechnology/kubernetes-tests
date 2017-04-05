@@ -5,7 +5,7 @@ import requests
 import json
 import time
 
-st2apikey = "OGNhYTM1YTUyYWY3Yjk2MjM3NmQwN2E1Mzc4Njc4MzFlZDNkODlkMzgwZWQ5ZGU1N2MxYjkwMWRjYzE0NmE1Yw"
+st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
 
 def test_stackstorm():
     hostYaml="/var/hosts.yaml"
