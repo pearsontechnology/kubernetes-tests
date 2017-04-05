@@ -141,7 +141,7 @@ executeInspecTests(testType, testFiles)
 executePythonTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
 
-if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
+if DEBUG != "FALSE": #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
     while True:
         time.sleep(5)
 
