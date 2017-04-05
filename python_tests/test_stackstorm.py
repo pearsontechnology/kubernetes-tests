@@ -61,7 +61,7 @@ def run_st2(st2host, data):
     #print r.history
 
     response = json.loads(r.text)
-    #print json.dumps(response, sort_keys=True, indent=2)
+    print json.dumps(response, sort_keys=True, indent=2)
     runner_id = response['id']
 
     runcount = 0
