@@ -7,7 +7,7 @@ import yaml
 import argparse
 import os
 import time
-from github import Github
+#from github import Github
 import urlparse
 import urllib
 
@@ -23,7 +23,7 @@ GIT_REPO = os.environ['GIT_REPO']
 GIT_BRANCH = os.environ['GIT_BRANCH']
 DEBUG = os.environ['DEBUG']
 
-g = Github(GIT_USERNAME, GIT_PASSWORD)
+#g = Github(GIT_USERNAME, GIT_PASSWORD)
 
 def clone_repo(name, url, directory):
     parts = urlparse.urlparse(url)
