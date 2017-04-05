@@ -83,64 +83,21 @@ describe service('tuned') do
 end
 
 describe file('/etc/resolv.conf') do
-  it { should match(%r{nameserver 172.31.16.2}) }
+  its('content') { should match(%r{nameserver 172.31.16.2}) }
 end
-describe file('/etc/ssl/docker-registry.pem') do
-  its('content') {should be '/etc/ssl/docker-registry.pem'}
+describe file('/etc/ssl') do
+  it should match {'/etc/ssl/docker-registry.pem'}
 end
-describe file('/etc/ssl/docker-registry-key.pem') do
-  its('content') {should match(%r{/etc/ssl/docker-registry-key.pem}) }
+describe file('/etc/ssl') do
+  its('type') {should match(%r{docker-registry-key.pem}) }
 end
-describe file('/etc/pki/ca-trust/source/anchors/cal.pem') do
-  its('content') {should match(%r{/etc/pki/ca-trust/source/anchors/ca.pem}) }
+describe file('/etc/pki/ca-trust/source/anchors') do
+  its('type') {should match(%r{ca.pem}) }
 end
-
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{admin.csr}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{admin-key.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{admin.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{bitesize.key}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{bitesizessl.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{ca-key.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{ca.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{ca.srl}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{docker-registry.csr}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{docker-registry-key.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{docker-registry.pem}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{git.key}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{openssl.cnf.tmpl}) }
-# end
-# describe file('/root/.ssh/files/kubernets/ssl') do
-#   its('type') {should match(%r{TrustedSecureCertificateAuthority5.pem}) }
-# end
-
 describe file('/etc/hosts') do
   its('content') { should match(%r{172.31.16.3 bitesize-registry.default.svc.cluster.local}) }
 end
+
 describe mount('/') do
   it { should be_mounted }
   its('type') { should eq  'xfs' }

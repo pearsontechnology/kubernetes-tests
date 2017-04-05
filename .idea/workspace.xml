@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fdb47eac-df3b-470a-90be-98a07125aec3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb" afterPath="$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -38,8 +39,8 @@
       <file leaf-file-name="test_minion_spec.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="103" column="52" lean-forward="true" selection-start-line="103" selection-start-column="52" selection-end-line="103" selection-end-column="52" />
+            <state relative-caret-position="505">
+              <caret line="92" column="3" lean-forward="true" selection-start-line="92" selection-start-column="3" selection-end-line="92" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -348,12 +349,12 @@
       <workItem from="1491321180123" duration="29000" />
       <workItem from="1491321225298" duration="39000" />
       <workItem from="1491321279518" duration="233000" />
-      <workItem from="1491321627611" duration="5444000" />
+      <workItem from="1491321627611" duration="5825000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7491000" />
+    <option name="totallyTimeSpent" value="7872000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="6" />
@@ -622,8 +623,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="103" column="52" lean-forward="true" selection-start-line="103" selection-start-column="52" selection-end-line="103" selection-end-column="52" />
+        <state relative-caret-position="505">
+          <caret line="92" column="3" lean-forward="true" selection-start-line="92" selection-start-column="3" selection-end-line="92" selection-end-column="3" />
           <folding />
         </state>
       </provider>
