@@ -35,7 +35,7 @@ def fill_consul(st2host, key, value):
 
     data = {"action": "consul.get",
             "user": None,
-            "parameters": {"key": "bitesize/defaults/jenkinsversion"}
+            "parameters": {"key": key}
            }
     
     resp = run_st2(st2host, data)
