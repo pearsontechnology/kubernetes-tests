@@ -88,16 +88,58 @@ end
 describe file('/etc/ssl/docker-registry.pem') do
   it {should exist}
 end
-# describe file('/etc/ssl') do
-#   its('type') {should match(%r{docker-registry-key.pem}) }
-# end
-# describe file('/etc/pki/ca-trust/source/anchors') do
-#   its('type') {should match(%r{ca.pem}) }
-# end
+describe file('/etc/ssl/docker-registry-key.pem') do
+  it {should exist}
+end
+describe file('/etc/pki/ca-trust/source/anchors/ca.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/admin.csr') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/admin-key.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/admin.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/bitesize.key') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/bitsizessl.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/ca-key.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/ca.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/ca.srl') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/docker-registry.csr') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/docker-registry-key.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/docker-registry.pem') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/git.key') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/openssl.cnf.tmpl') do
+  it {should exist}
+end
+describe file('/root/.ssh/files/kubernets/ssl/TrustedSecureCertificateAuthority5.pem') do
+  it {should exist}
+end
+
 describe file('/etc/hosts') do
   its('content') { should match(%r{172.31.16.3 bitesize-registry.default.svc.cluster.local}) }
 end
-
 describe mount('/') do
   it { should be_mounted }
   its('type') { should eq  'xfs' }
