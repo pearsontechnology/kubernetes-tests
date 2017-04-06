@@ -44,7 +44,7 @@ def fill_consul(st2host, key, value):
         data = {"action": "consul.put",
                 "user": None,
                 "parameters": {
-                    "key": key
+                    "key": key,
                     "value": value}
                }
 
