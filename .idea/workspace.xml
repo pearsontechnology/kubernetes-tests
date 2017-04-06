@@ -38,8 +38,8 @@
       <file leaf-file-name="test_minion_spec.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
-              <caret line="88" column="16" lean-forward="false" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
+            <state relative-caret-position="507">
+              <caret line="92" column="5" lean-forward="true" selection-start-line="92" selection-start-column="5" selection-end-line="92" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -348,12 +348,12 @@
       <workItem from="1491321180123" duration="29000" />
       <workItem from="1491321225298" duration="39000" />
       <workItem from="1491321279518" duration="233000" />
-      <workItem from="1491321627611" duration="6127000" />
+      <workItem from="1491321627611" duration="6294000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8174000" />
+    <option name="totallyTimeSpent" value="8341000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="6" />
@@ -622,8 +622,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inspec_tests/controls/test_minion_spec.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="88" column="16" lean-forward="false" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
+        <state relative-caret-position="507">
+          <caret line="92" column="5" lean-forward="true" selection-start-line="92" selection-start-column="5" selection-end-line="92" selection-end-column="5" />
           <folding />
         </state>
       </provider>

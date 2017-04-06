@@ -86,7 +86,7 @@ describe file('/etc/resolv.conf') do
   its('content') { should match(%r{nameserver 172.31.16.2}) }
 end
 describe file('/etc/ssl') do
-  its ('type') {should eq 'docker-registry.pem'}
+  it {should eq 'docker-registry.pem'}
 end
 # describe file('/etc/ssl') do
 #   its('type') {should match(%r{docker-registry-key.pem}) }
