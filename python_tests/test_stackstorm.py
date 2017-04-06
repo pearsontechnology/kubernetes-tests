@@ -7,6 +7,8 @@ import time
 
 st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
 
+    
+
 def test_stackstorm():
     hostYaml="/var/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
@@ -14,12 +16,39 @@ def test_stackstorm():
         for host in contents['hosts']:
             if ("stackstorm" in host['name']):
                 ip=host['value']
-                # Verify the Ansible Playbook Finished and there is no failures.  Look for the ansible RECAP and find any instances of failed=x where x is greater than zero
+
+                checkfill(ip)
+
                 errorCode,stderr=request_ns(ip)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
                 errorCode,stderr=create_project(ip)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
+def checkfill(st2host):
+    errorCode,stderr = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
+    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+    errorCode,stderr = fill_consul(st2host, "bitesize/defaults/defaultdomain", "prsn-dev.io")
+    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
+def fill_consul(st2host, key, value):
+
+    data = {"action": "consul.get",
+            "user": None,
+            "parameters": {"key": "bitesize/defaults/jenkinsversion"}
+           }
+    
+    resp = run_st2(st2host, data)
+
+    if resp[0] == 0:
+        data = {"action": "consul.put",
+                "user": None,
+                "parameters": {
+                    "key": key
+                    "value": value}
+               }
+
+    return run_st2(st2host, data)
 
 def request_ns(st2host):
 
@@ -28,7 +57,7 @@ def request_ns(st2host):
             "parameters": {
                 "email": "test@test.com",
                 "ns_list": ["dev"],
-                "project": "kt",
+                "project": "kubetests",
                 "gitrepo": "git@github.com:AndyMoore111/test-app-v2.git",
                 "gitrequired": True}
            }
@@ -39,7 +68,7 @@ def create_project(st2host):
 
     data = {"action": "bitesize.create_project",
             "parameters": {
-                "project": "kt"}
+                "project": "kubetests"}
            }
 
     return run_st2(st2host, data)
