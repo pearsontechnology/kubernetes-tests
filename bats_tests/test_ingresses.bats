@@ -19,8 +19,7 @@ load helpers
 }
 
 @test "ingress without host defined does not generate" {
-  this_folder=`pwd`
-  assets_folder=$this_folder/../test_assets
+  assets_folder="/tmp/kubernetes-tests/test_assets"
   kubectl create -f $assets_folder/ingress.hashost.yaml
   sleep 10
   for pod in `kubectl get pods --namespace=kube-system | grep -oEi "nginx-ingress-[0-9a-z]+"`; do
