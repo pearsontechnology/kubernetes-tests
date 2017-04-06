@@ -28,7 +28,7 @@ load helpers
   sleep 10
   for pod in $(kubectl get pods --namespace=kube-system | grep -oEi "nginx-ingress-[0-9a-z]+"); do
     `kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf`>hosts.txt
-    ingressHasHost=`grep "ingress-host-test" hosts.txt`>hosts.txt
+    `grep "ingress-host-test" hosts.txt`>hosts.txt
     line_count=`wc -l hosts.txt`
     [ "$line_count" -gt 0 ]
   done
@@ -37,8 +37,8 @@ load helpers
   sleep 10
   for pod in $(kubectl get pods --namespace=kube-system | grep -oEi "nginx-ingress-[0-9a-z]+"); do
     `kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf`>hosts.txt
-    ingressHasHost=`grep "ingress-host-test" hosts.txt`>hosts.txt
-    line_count=`wc -l hosts.txt`
+    `grep "ingress-host-test" hosts.txt`>hosts.txt
+    `line_count=wc -l hosts.txt`
     [ "$line_count" -eq 0 ]
   done
   kubectl delete -f $assets_folder/ingress.nohost.yaml
