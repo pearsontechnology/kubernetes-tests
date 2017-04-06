@@ -20,6 +20,10 @@ load helpers
 
 @test "ingress without host defined does not generate" {
   assets_folder="/tmp/kubernetes-tests/test_assets"
+  existingIngress=`kubectl get ing --namespace=kube-system ingress-host-test --no-headers`
+  if [[ "$existingIngress" != "" ]]; then
+    kubectl delete -f $assets_folder/ingress.hashost.yaml
+  fi
   kubectl create -f $assets_folder/ingress.hashost.yaml
   sleep 10
   for pod in `kubectl get pods --namespace=kube-system | grep -oEi "nginx-ingress-[0-9a-z]+"`; do
