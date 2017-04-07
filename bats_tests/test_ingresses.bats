@@ -33,20 +33,22 @@ load helpers
   kubectl create -f $assets_folder/ingress.hashost.yaml
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
-  for pod in $pods; do
-    run kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "ingress-host-test" | wc -l
-    [ "$status" -eq 0 ]
-    [ "$output" -gt 0 ]
-  done
+  run filtered_ingress_logs_eq_0 pods "ingress-host-test"
+  #for pod in $pods; do
+  #  run kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "ingress-host-test" | wc -l
+  #  [ "$status" -eq 0 ]
+  #  [ "$output" -gt 0 ]
+  #done
   kubectl delete -f $assets_folder/ingress.hashost.yaml
   kubectl create -f $assets_folder/ingress.nohost.yaml
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
-  for pod in $pods; do
-    run kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "ingress-host-test" | wc -l
-    [ "$status" -eq 0 ]
-    [ "$output" -gt 0 ]
-  done
+  run filtered_ingress_logs_gt_0 pods "ingress-host-test"
+  #for pod in $pods; do
+  #  run kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "ingress-host-test" | wc -l
+  #  [ "$status" -eq 0 ]
+  #  [ "$output" -gt 0 ]
+  #done
   kubectl delete -f $assets_folder/ingress.nohost.yaml
 }
 
