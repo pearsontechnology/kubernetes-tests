@@ -4,6 +4,7 @@ metadata:
   name: testexecutor
   namespace: test-runner
 spec:
+  manualSelector: true
   selector:
     matchLabels:
       app: testexecutor
