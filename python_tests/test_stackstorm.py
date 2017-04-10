@@ -69,13 +69,13 @@ def request_ns(st2host):
 
 def cleanup(st2host):
 
-    errorCode,stderr=delete_ns(ip, "kubetests-dev")
+    errorCode,stderr=delete_ns(st2host, "kubetests-dev")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-    errorCode,stderr=delete_ns(ip, "kubetests-jnk")
+    errorCode,stderr=delete_ns(st2host, "kubetests-jnk")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-    errorCode,stderr=delete_r53(ip)
+    errorCode,stderr=delete_r53(st2host)
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def delete_ns(st2host, ns):
