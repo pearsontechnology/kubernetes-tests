@@ -25,6 +25,8 @@ def test_stackstorm():
                 errorCode,stderr=create_project(ip)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
+                cleanup(ip) 
+
 
 def checkfill(st2host):
     errorCode,stderr = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
@@ -92,7 +94,7 @@ def delete_r53(st2host):
     domain = os.environ["DOMAIN"]
     cname = 'kubetests.' + env + '.' + domain
 
-    data = {"action": "aws.r53_zone_delete_cname":
+    data = {"action": "aws.r53_zone_delete_cname",
             "user": None,
             "parameters": {
                 "name": cname,
