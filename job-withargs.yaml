@@ -61,6 +61,8 @@ spec:
           value: "%%MINION_COUNT%%"
         - name: CONSUL_MASTER_TOKEN
           value: "%%CONSUL_MASTER_TOKEN%%"
+        - name: DOMAIN
+          value: "%%DOMAIN%%"
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:

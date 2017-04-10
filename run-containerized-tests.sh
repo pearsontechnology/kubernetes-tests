@@ -58,6 +58,7 @@ run_test(){
   sed -i '' -e "s/%%KUBERNETES_VERSION%%/$KUBERNETES_VERSION/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%ANSIBLE_BRANCH%%/$ANSIBLE_BRANCH/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%DOMAIN%%/$DOMAIN/" job-temp.yaml > /dev/null 2>&1
   #Need to delete jobs
   if  [[ $(kubectl get jobs testexecutor --namespace=test-runner) ]]
   then  #Job already exists. Clean-up first
