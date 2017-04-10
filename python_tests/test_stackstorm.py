@@ -7,7 +7,7 @@ import time
 
 st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
 
-    
+
 
 def test_stackstorm():
     hostYaml="/var/hosts.yaml"
@@ -25,6 +25,7 @@ def test_stackstorm():
                 errorCode,stderr=create_project(ip)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
+
 def checkfill(st2host):
     errorCode,stderr = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
@@ -37,7 +38,7 @@ def fill_consul(st2host, key, value):
             "user": None,
             "parameters": {"key": key}
            }
-    
+
     resp = run_st2(st2host, data)
 
     if resp[0] == 0:
@@ -60,6 +61,42 @@ def request_ns(st2host):
                 "project": "kubetests",
                 "gitrepo": "git@github.com:AndyMoore111/test-app-v2.git",
                 "gitrequired": True}
+           }
+
+    return run_st2(st2host, data)
+
+def cleanup(st2host):
+
+    errorCode,stderr=delete_ns(ip, "kubetests-dev")
+    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
+    errorCode,stderr=delete_ns(ip, "kubetests-jnk")
+    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
+    errorCode,stderr=delete_r53(ip)
+    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
+def delete_ns(st2host, ns):
+    data = {"action": "kubernetes.deleteCoreV1Namespace",
+            "user": None,
+            "parameters": {
+                "body": {},
+                "name": ns}
+           }
+
+    return run_st2(st2host, data)
+
+def delete_r53(st2host):
+
+    env = os.environ["ENVIRONMENT"]
+    domain = os.environ["DOMAIN"]
+    cname = 'kubetests.' + env + '.' + domain
+
+    data = {"action": "aws.r53_zone_delete_cname":
+            "user": None,
+            "parameters": {
+                "name": cname,
+                "zone": domain}
            }
 
     return run_st2(st2host, data)
@@ -90,7 +127,7 @@ def run_st2(st2host, data):
     #print r.history
 
     response = json.loads(r.text)
-    print json.dumps(response, sort_keys=True, indent=2)
+    #print json.dumps(response, sort_keys=True, indent=2)
     runner_id = response['id']
 
     runcount = 0
