@@ -138,8 +138,8 @@ testFiles = args.files
 clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-tests.git", "/tmp/kubernetes-tests")
 
 executeInspecTests(testType, testFiles)
-executePythonTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
+executePythonTests(testType, testFiles)
 
 if DEBUG != "FALSE": #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
     while True:
