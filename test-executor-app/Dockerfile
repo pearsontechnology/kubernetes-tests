@@ -4,18 +4,15 @@ MAINTAINER Bitesize Project <bitesize-techops@pearson.com>
 
 CMD ["/sbin/my_init"]
 
+WORKDIR /opt/testexecutor
+
 RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
 
 RUN apt-get update && apt-get install -y python-dev
 
 #Install Python Dependencies
-RUN pip install boto3
-RUN pip install nose2
-RUN pip install botocore
-RUN pip install PyGithub
-RUN pip install python-dateutil
-RUN pip install PyYaml
+RUN pip install boto3 nose2 botocore PyGithub python-dateutil PyYaml awscli jwt
 
 #Install INSPEC
 RUN gem install inspec
@@ -25,17 +22,14 @@ RUN git clone https://github.com/sstephenson/bats.git
 RUN bats/install.sh .
 #fpm -s dir -t deb -n bats --iteration $(date "+%Y%m%d%H%M%S") --prefix /usr/local/ bin libexec
 
-RUN mkdir -p var
-
 #Install Kubernetes kubectl
-RUN curl -L -k -s -o kubernetes.tar.gz https://github.com/kubernetes/kubernetes/releases/download/v1.2.2/kubernetes.tar.gz
-RUN tar -zvxf kubernetes.tar.gz kubernetes/platforms/darwin/amd64/kubectl -C var
+RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.2.2/bin/linux/amd64/kubectl
 
-#Install Test-Executor run scripts
-COPY testRunner.py var
-COPY run.sh var
+COPY testRunner.py /opt/testexecutor
+COPY run.sh /opt/testexecutor
+RUN ls
 
 #Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENTRYPOINT ["/var/run.sh"]
+ENTRYPOINT ["/opt/testexecutor/run.sh"]
