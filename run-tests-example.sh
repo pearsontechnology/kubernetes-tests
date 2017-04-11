@@ -1,9 +1,18 @@
 #!/bin/bash
 
-if [[ ( -z "$ENVIRONMENT") || ( -z "$REGION") || ( -z "$STACK_ID") ]]
-then
-   echo -e "Environment variables 'ENVIRONMENT', 'REGION', 'STACK_ID' not set"
-   exit 1
+while getopts ":d:" o; do
+    case "${o}" in
+        d)
+            d=${OPTARG}
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+export DEBUG=`echo ${d} | tr [a-z] [A-Z]`
+#Default debug mode if not provided
+if [[ -z "${d}" ]]; then
+  export DEBUG=FALSE
 fi
 
 kubectl get namespace test-runner > /dev/null 2>&1 || kubectl create namespace test-runner

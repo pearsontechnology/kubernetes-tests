@@ -129,6 +129,7 @@ args = parser.parse_args()
 hostYaml = args.config
 testType = args.type
 testFiles = args.files
+DEBUG = str_to_bool(os.environ['DEBUG'])
 
 #print("Host Yaml= %s" % (hostYaml))
 #print("Test Type= %s" % (testType))
@@ -139,6 +140,10 @@ clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-
 executeInspecTests(testType, testFiles)
 executePythonTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
+
+if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
+    while True:
+        time.sleep(5)
 
 if(failuresReceived):
     print ("**********************************************************")
