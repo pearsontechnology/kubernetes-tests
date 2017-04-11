@@ -7,6 +7,7 @@ load helpers
 # Infrastructure
 
 @test "ssh master" {
-  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no master.${TF_VAR_environment}.${DOMAIN} 'test /etc/passwd'
+  # This need to run after running - python tools/migrate_cluster.py --env <tikky6> --region <us-east-1>
+  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no master.${ENVIRONMENT}.${DOMAIN} 'test /etc/passwd'
 }
 
