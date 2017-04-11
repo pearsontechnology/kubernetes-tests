@@ -5,14 +5,15 @@ MAINTAINER Bitesize Project <bitesize-techops@pearson.com>
 CMD ["/sbin/my_init"]
 
 WORKDIR /opt/testexecutor
+ENV PATH /opt/testexecutor:$PATH
 
 RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
 
-RUN apt-get update && apt-get install -y python-dev
+RUN apt-get update && apt-get install -y python-dev jq git-all
 
 #Install Python Dependencies
-RUN pip install boto3 nose2 botocore PyGithub python-dateutil PyYaml awscli jwt
+RUN pip install boto3 nose2 botocore PyGithub python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures
 
 #Install INSPEC
 RUN gem install inspec
