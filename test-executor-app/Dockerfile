@@ -22,13 +22,16 @@ RUN gem install inspec
 
 #Install Bats
 RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
+RUN chmod +x bats/bin/bats
 
 #Install Kubernetes kubectl
 RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.2.2/bin/linux/amd64/kubectl
 
 COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
+RUN chmod +x /opt/testexecutor/*
 
-RUN chmod -R 775 /opt/testexecutor/*
+#RUN python --version
+#RUN pip freeze
 
 ENTRYPOINT ["/opt/testexecutor/run.sh"]
