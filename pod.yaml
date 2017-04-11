@@ -54,5 +54,6 @@ spec:
             value: "%%MINION_COUNT%%"
           - name: DEBUG
             value: "%%DEBUG%%"
+      restartPolicy: Never
       nodeSelector:
         role: minion
