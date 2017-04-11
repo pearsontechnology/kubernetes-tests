@@ -19,4 +19,13 @@ sed -i '' -e "s/%%KUBE_PASS%%/$KUBE_PASS/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%DEBUG%%/$DEBUG/" pod-temp.yaml > /dev/null 2>&1
 
+if  [[ $(kubectl get rc testexecutor --namespace=test-runner) ]]
+then  #RC already exists. Clean-up first
+  kubectl delete rc testexecutor --namespace=test-runner > /dev/null 2>&1
+  kubectl create -f pod-temp.yaml
+else
+  kubectl create -f pod-temp.yaml
+fi
+
+
 kubectl create -f pod-temp.yaml
