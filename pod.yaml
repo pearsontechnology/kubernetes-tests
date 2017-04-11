@@ -37,22 +37,22 @@ spec:
                 name: test-runner-secrets
                 key: git-password
           - name: STACK_ID
-            value: "$(STACK_ID)"
+            value: "%%STACK_ID%%"
           - name: ANSIBLE_BRANCH
-            value: "$(ANSIBLE_BRANCH)"
+            value: "%%ANSIBLE_BRANCH%%"
           - name: REGION
-            value: "$(REGION)"
+            value: "%%REGION%%"
           - name: ENVIRONMENT
-            value: "$(ENVIRONMENT)"
+            value: "%%ENVIRONMENT%%"
           - name: GIT_REPO
             value: "git@github.com:pearsontechnology/kubernetes-tests.git"
           - name: GIT_BRANCH
-            value: "$(TEST_BRANCH)"
+            value: "%%TEST_BRANCH%%"
           - name: KUBE_PASS
-            value: "$(KUBE_PASS)"
+            value: "%%KUBE_PASS%%"
           - name: MINION_COUNT
-            value: "$(MINION_COUNT)"
+            value: "%%MINION_COUNT%%"
           - name: DEBUG
-            value: "$(DEBUG)"
+            value: "%%DEBUG%%"
       nodeSelector:
         role: minion

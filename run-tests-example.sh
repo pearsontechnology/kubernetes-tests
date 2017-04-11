@@ -6,6 +6,8 @@ then
    exit 1
 fi
 
+kubectl get namespace test-runner > /dev/null 2>&1 || kubectl create namespace test-runner
+
 cp pod.yaml pod-temp.yaml
 
 sed -i '' -e "s/%%STACK_ID%%/$STACK_ID/" pod-temp.yaml > /dev/null 2>&1
