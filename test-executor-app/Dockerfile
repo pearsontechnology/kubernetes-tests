@@ -13,7 +13,9 @@ RUN python get-pip.py
 RUN apt-get update && apt-get install -y python-dev jq git-all
 
 #Install Python Dependencies
-RUN pip install boto3 nose2 botocore PyGithub python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures
+RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures
+RUN pip install PyGithub==1.28
+
 
 #Install INSPEC
 RUN gem install inspec
@@ -30,6 +32,8 @@ COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
 RUN chmod +x /opt/testexecutor/*
 
+RUN python --version
+RUN pip freeze
 #Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

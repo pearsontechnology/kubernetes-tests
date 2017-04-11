@@ -47,7 +47,7 @@ spec:
           - name: GIT_REPO
             value: "git@github.com:pearsontechnology/kubernetes-tests.git"
           - name: GIT_BRANCH
-            value: "%%TEST_BRANCH%%"
+            value: "%%GIT_BRANCH%%"
           - name: KUBE_PASS
             value: "%%KUBE_PASS%%"
           - name: MINION_COUNT
