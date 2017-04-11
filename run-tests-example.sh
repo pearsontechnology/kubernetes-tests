@@ -35,6 +35,3 @@ then  #RC already exists. Clean-up first
 else
   kubectl create -f pod-temp.yaml
 fi
-
-
-kubectl create -f pod-temp.yaml
