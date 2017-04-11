@@ -28,4 +28,4 @@ kubectl config set-credentials ${ENVIRONMENT}-admin --client-key=/etc/secret-vol
 kubectl config set-context ${ENVIRONMENT} --cluster=${ENVIRONMENT} --user=${ENVIRONMENT}-admin
 kubectl config use-context ${ENVIRONMENT}
 
-python -u /opt/testexecutor/testRunner.py "/var/hosts.yaml" $@
+python -u /opt/testexecutor/testRunner.py "/opt/testexecutor/hosts.yaml" $@

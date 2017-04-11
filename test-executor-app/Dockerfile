@@ -21,9 +21,7 @@ RUN pip install PyGithub==1.28
 RUN gem install inspec
 
 #Install Bats
-RUN git clone https://github.com/sstephenson/bats.git
-RUN bats/install.sh .
-#fpm -s dir -t deb -n bats --iteration $(date "+%Y%m%d%H%M%S") --prefix /usr/local/ bin libexec
+RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
 
 #Install Kubernetes kubectl
 RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.2.2/bin/linux/amd64/kubectl
@@ -32,9 +30,7 @@ COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
 RUN chmod +x /opt/testexecutor/*
 
-RUN python --version
-RUN pip freeze
-#Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN python --version
+#RUN pip freeze
 
 ENTRYPOINT ["/opt/testexecutor/run.sh"]
