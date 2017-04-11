@@ -28,7 +28,7 @@ RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/
 
 COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
-RUN ls
+RUN chmod +x /opt/testexecutor/*
 
 #Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
