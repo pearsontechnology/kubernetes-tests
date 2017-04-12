@@ -28,4 +28,5 @@ COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
 RUN chmod -R 775 /opt/testexecutor/*
 
+CMD ["/bin/bash"]
 ENTRYPOINT ["/opt/testexecutor/run.sh"]
