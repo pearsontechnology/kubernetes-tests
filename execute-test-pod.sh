@@ -33,6 +33,12 @@ if [[ -z "${b}" ]]; then
   display_usage
 fi
 
+if [[ ! $(kubectl get secrets --namespace=test-runner | grep -i test-runner-secrets) ]] || [[ -z "${STACK_ID}" ]] || [[ -z "${ANSIBLE_BRANCH}" ]] || [[ -z "${REGION}" ]] || [[ -z "${ENVIRONMENT}" ]] || [[ -z "${TEST_BRANCH}" ]] || [[ -z "${KUBE_PAAS}" ]] || [[ -z "${MINION_COUNT}" ]];then
+  echo "Environment is not complete, try shelling back into root (sudo su -)"
+  exit 1
+fi
+
+
 kubectl get namespace test-runner > /dev/null 2>&1 || kubectl create namespace test-runner
 
 cp pod.yaml pod-temp.yaml
@@ -46,7 +52,7 @@ sed -i '' -e "s/%%KUBE_PASS%%/$KUBE_PASS/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%DEBUG%%/$DEBUG/" pod-temp.yaml > /dev/null 2>&1
 
-if  [[ $(kubectl get pod testexecutor --namespace=test-runner) ]]
+if  [[ $(kubectl get pod testpod --namespace=test-runner) ]]
 then
   kubectl delete -f pod-temp.yaml
   kubectl create -f pod-temp.yaml
@@ -55,7 +61,7 @@ else
 fi
 
 count=0
-podstate=`kubectl get pods --namespace=test-runner | grep -i testexecutor | grep -i Running | awk '{print $3}'`
+podstate=`kubectl get pods --namespace=test-runner | grep -i testpod | grep -i Running | awk '{print $3}'`
 while [[ "$podstate" != "Running" ]];do
   if [ $count -gt 10 ]; then
     echo "Testexecutor pod did not enter a running state"
@@ -63,8 +69,8 @@ while [[ "$podstate" != "Running" ]];do
   fi
   echo "Waiting on Pod to begin running $(($count * 5))/$((10 * 5))"
   sleep 5
-  podstate=`kubectl get pods --namespace=test-runner | grep -i testexecutor | grep -i Running | awk '{print $3}'`
+  podstate=`kubectl get pods --namespace=test-runner | grep -i testpod | grep -i Running | awk '{print $3}'`
   let count=count+1
 done
 
-kubectl logs -f testexecutor -c test-executor-app --namespace=test-runner
+kubectl logs -f testpod -c test-executor-app --namespace=test-runner
