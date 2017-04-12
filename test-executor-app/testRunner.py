@@ -119,7 +119,7 @@ def executeBatsTests(testType, testFiles):
         print_test_msg("Bats")
         for test in testFiles:
             t = batsDir + test
-            run_script("/opt/testexecutor/bats/bin/bats -t %s" % (batsDir), True)
+            run_script("bats -t %s" % (batsDir), True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("config", help="config - Key/Value Yaml File containing hostnames ad :ips' to test")

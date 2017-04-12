@@ -3,12 +3,13 @@ FROM phusion/passenger-full:0.9.19
 MAINTAINER Bitesize Project <bitesize-techops@pearson.com>
 
 WORKDIR /opt/testexecutor
-ENV PATH /opt/testexecutor:$PATH
+ENV PATH "$PATH:/opt/testexecutor"
+ENV PATH "$PATH:/opt/testexecutor/bin"
 
 RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
 
-RUN apt-get update && apt-get install -y python-dev jq git-all
+RUN apt-get update && apt-get install -y --force-yes python-dev jq git-all
 
 #Install Python Dependencies
 RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures

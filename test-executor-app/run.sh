@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export KUBE_TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
 export NAMESPACE=`cat /var/run/secrets/kubernetes.io/serviceaccount/namespace`
