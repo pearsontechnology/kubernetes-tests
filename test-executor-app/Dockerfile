@@ -17,7 +17,8 @@ RUN pip install PyGithub==1.28
 
 #Install INSPEC
 RUN gem install --user-install inspec
-ENV PATH "$PATH:$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
+ENV PATH "$PATH:/root/.gem/ruby/2.3.0/bin"
+
 
 #Install Bats
 RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
