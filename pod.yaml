@@ -1,58 +1,50 @@
 apiVersion: v1
-kind: ReplicationController
+kind: Pod
 metadata:
   namespace: test-runner
   name: testexecutor
 spec:
-  replicas: 1
-  selector:
-    app: testexecutor
-  template:
-    metadata:
-      name: testexecutor
-      labels:
-        app: testexecutor
-    spec:
-      volumes:
-        - name: secret-volume
-          secret:
-            secretName: test-runner-secrets
-      containers:
-        - name: test-executor-app
-          image: pearsontechnology/test-executor-app:1.0.0
-          imagePullPolicy: Always
-          volumeMounts:
-          - mountPath: /etc/secret-volume
-            name: secret-volume
-            readOnly: true
-          env:
-          - name: GIT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: test-runner-secrets
-                key: git-username
-          - name: GIT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: test-runner-secrets
-                key: git-password
-          - name: STACK_ID
-            value: "%%STACK_ID%%"
-          - name: ANSIBLE_BRANCH
-            value: "%%ANSIBLE_BRANCH%%"
-          - name: REGION
-            value: "%%REGION%%"
-          - name: ENVIRONMENT
-            value: "%%ENVIRONMENT%%"
-          - name: GIT_REPO
-            value: "git@github.com:pearsontechnology/kubernetes-tests.git"
-          - name: GIT_BRANCH
-            value: "%%GIT_BRANCH%%"
-          - name: KUBE_PASS
-            value: "%%KUBE_PASS%%"
-          - name: MINION_COUNT
-            value: "%%MINION_COUNT%%"
-          - name: DEBUG
-            value: "%%DEBUG%%"
-      nodeSelector:
-        role: minion
+  restartPolicy: Never
+  volumes:
+    - name: secret-volume
+      secret:
+        secretName: test-runner-secrets
+  containers:
+    - name: test-executor-app
+      image: pearsontechnology/test-executor-app:1.0.0
+      imagePullPolicy: Always
+      volumeMounts:
+      - mountPath: /etc/secret-volume
+        name: secret-volume
+        readOnly: true
+      env:
+      - name: GIT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: test-runner-secrets
+            key: git-username
+      - name: GIT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: test-runner-secrets
+            key: git-password
+      - name: STACK_ID
+        value: "%%STACK_ID%%"
+      - name: ANSIBLE_BRANCH
+        value: "%%ANSIBLE_BRANCH%%"
+      - name: REGION
+        value: "%%REGION%%"
+      - name: ENVIRONMENT
+        value: "%%ENVIRONMENT%%"
+      - name: GIT_REPO
+        value: "git@github.com:pearsontechnology/kubernetes-tests.git"
+      - name: GIT_BRANCH
+        value: "%%GIT_BRANCH%%"
+      - name: KUBE_PASS
+        value: "%%KUBE_PASS%%"
+      - name: MINION_COUNT
+        value: "%%MINION_COUNT%%"
+      - name: DEBUG
+        value: "%%DEBUG%%"
+  nodeSelector:
+    role: minion

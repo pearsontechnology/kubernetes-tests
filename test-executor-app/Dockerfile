@@ -5,6 +5,7 @@ MAINTAINER Bitesize Project <bitesize-techops@pearson.com>
 WORKDIR /opt/testexecutor
 ENV PATH "$PATH:/opt/testexecutor"
 ENV PATH "$PATH:/opt/testexecutor/bin"
+ENV PATH "$PATH:/usr/local/rvm/gems/ruby-2.3.1/bin"
 
 RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
@@ -17,8 +18,6 @@ RUN pip install PyGithub==1.28
 
 #Install INSPEC
 RUN gem install inspec
-ENV PATH "$PATH:/usr/local/rvm/gems/ruby-2.3.1/gems/bin"
-
 
 #Install Bats
 RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
@@ -30,4 +29,4 @@ COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
 RUN chmod -R 775 /opt/testexecutor/*
 
-ENTRYPOINT ["/bin/bash","-c","/opt/testexecutor/run.sh"]
+ENTRYPOINT ["/opt/testexecutor/run.sh"]
