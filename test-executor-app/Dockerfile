@@ -16,8 +16,8 @@ RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath 
 RUN pip install PyGithub==1.28
 
 #Install INSPEC
-RUN gem install --user-install inspec
-ENV PATH "$PATH:/root/.gem/ruby/2.3.0/bin"
+RUN gem install inspec
+ENV PATH "$PATH:/usr/local/rvm/gems/ruby-2.3.1/gems/bin"
 
 
 #Install Bats
