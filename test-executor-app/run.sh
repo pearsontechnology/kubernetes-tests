@@ -23,9 +23,9 @@ for ip in $IPS;do
   ssh-keyscan $ip >> ~/.ssh/known_hosts > /dev/null 2>&1
 done
 
-kubectl config set-cluster ${ENVIRONMENT} --server=https://${KUBERNETES_SERVICE_HOST} --certificate-authority=/etc/secret-volume/kubectl-ca
-kubectl config set-credentials ${ENVIRONMENT}-admin --client-key=/etc/secret-volume/kubectl-client-key --username=admin --password=${KUBE_PASS}
-kubectl config set-context ${ENVIRONMENT} --cluster=${ENVIRONMENT} --user=${ENVIRONMENT}-admin
-kubectl config use-context ${ENVIRONMENT}
+kubectl config set-cluster ${ENVIRONMENT} --server=https://${KUBERNETES_SERVICE_HOST} --certificate-authority=/etc/secret-volume/kubectl-ca > /dev/null 2>&1
+kubectl config set-credentials ${ENVIRONMENT}-admin --client-key=/etc/secret-volume/kubectl-client-key --username=admin --password=${KUBE_PASS} > /dev/null 2>&1
+kubectl config set-context ${ENVIRONMENT} --cluster=${ENVIRONMENT} --user=${ENVIRONMENT}-admin > /dev/null 2>&1
+kubectl config use-context ${ENVIRONMENT} > /dev/null 2>&1
 
 python -u /opt/testexecutor/testRunner.py "/opt/testexecutor/hosts.yaml" $@
