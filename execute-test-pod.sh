@@ -33,8 +33,13 @@ if [[ -z "${b}" ]]; then
   display_usage
 fi
 
-if [[ ! $(kubectl get secrets --namespace=test-runner | grep -i test-runner-secrets) ]] || [[ -z "${STACK_ID}" ]] || [[ -z "${ANSIBLE_BRANCH}" ]] || [[ -z "${REGION}" ]] || [[ -z "${ENVIRONMENT}" ]] || [[ -z "${TEST_BRANCH}" ]] || [[ -z "${KUBE_PAAS}" ]] || [[ -z "${MINION_COUNT}" ]];then
-  echo "Environment is not complete, try shelling back into root (sudo su -)"
+if [[ ! $(kubectl get secrets --namespace=test-runner | grep -i test-runner-secrets) ]]; then
+  echo "Test Runner Secrets do not yet exist in the test-runner namespace (These are created by Master user-data). Exiting..."
+  exit 1
+fi
+
+if [ -z "${STACK_ID}" ] || [ -z "${ANSIBLE_BRANCH}" ] || [ -z "${REGION}" ] || [ -z "${ENVIRONMENT}" ] || [ -z "${TEST_BRANCH}" ] || [ -z "${KUBE_PASS}" ] || [ -z "${MINION_COUNT}" ];then
+  echo "Environment Variables are not complete, try shelling back into root (sudo su -) and re-running."
   exit 1
 fi
 
@@ -55,6 +60,17 @@ sed -i '' -e "s/%%DEBUG%%/$DEBUG/" pod-temp.yaml > /dev/null 2>&1
 if  [[ $(kubectl get pod testpod --namespace=test-runner) ]]
 then
   kubectl delete -f pod-temp.yaml
+
+	count=0
+	while [[ $(kubectl get pods --namespace=test-runner | grep -i testpod ) ]];do
+	  if [ $count -gt 12 ]; then
+	    echo "Existing Pod did not Exit"
+	    exit 1
+	  fi
+	  echo "Waiting on Existing Pod to exit. $(($count * 5))/$((12 * 5)) seconds have elapsed"
+	  sleep 5
+	  let count=count+1
+	done
   kubectl create -f pod-temp.yaml
 else
   kubectl create -f pod-temp.yaml
@@ -63,11 +79,11 @@ fi
 count=0
 podstate=`kubectl get pods --namespace=test-runner | grep -i testpod | grep -i Running | awk '{print $3}'`
 while [[ "$podstate" != "Running" ]];do
-  if [ $count -gt 10 ]; then
+  if [ $count -gt 12 ]; then
     echo "Testexecutor pod did not enter a running state"
     exit 1
   fi
-  echo "Waiting on Pod to begin running $(($count * 5))/$((10 * 5))"
+  echo "Waiting on Pod to begin running. $(($count * 5))/$((12 * 5)) seconds have elapsed"
   sleep 5
   podstate=`kubectl get pods --namespace=test-runner | grep -i testpod | grep -i Running | awk '{print $3}'`
   let count=count+1
