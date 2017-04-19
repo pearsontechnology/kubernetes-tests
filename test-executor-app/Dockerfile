@@ -10,7 +10,7 @@ ENV PATH "$PATH:/usr/local/rvm/gems/ruby-2.3.1/bin"
 RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
 
-RUN apt-get update && apt-get install -y python-dev jq git-all
+RUN apt-get update --fix-missing && apt-get install -y python-dev jq git-all
 
 #Install Python Dependencies
 RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures
