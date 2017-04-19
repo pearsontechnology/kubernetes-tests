@@ -27,6 +27,9 @@ describe service('kubelet') do
   it { should be_enabled }
   it { should be_running }
 end
+describe service('bitesize-authz') do
+  it { should_not be_running }
+end
 describe service('auditd') do
   it { should be_enabled }
   it { should be_running }
@@ -95,4 +98,3 @@ describe mount('/mnt/docker') do
   it { should be_mounted }
   its('type') { should eq 'btrfs'}
 end
-
