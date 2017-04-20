@@ -28,20 +28,21 @@ load helpers
       kubectl delete ns test-namespace-qa
     fi
   fi
-  sleep 20
+
+  #Wait for NS deletion (2 min max wait for command to come back non-zero)
+  wait-for-code "run kubectl get ns test-namespace-qa" 1
+  wait-for-code "run kubectl get ns test-namespace-prd" 1
+  wait-for-code "run kubectl get ns test-namespace-dev" 1
 
   kubectl create ns test-namespace-dev
   kubectl create ns test-namespace-prd
   kubectl create ns test-namespace-qa
 
-  run kubectl get deployment --namespace=test-namespace-dev jenkins --no-headers
-  if [ "$status" -eq 0 ]; then
-    if [ "$output" != "" ]; then
-      kubectl delete -f $assets_folder/jenkins-dep.yaml
-    fi
-  fi
   kubectl create -f $assets_folder/jenkins-dep.yaml
-  sleep 20
+
+  #Wait for jenkins pod creation (2 min max wait for command to come back with zero exit code)
+  wait-for-code "run kubectl get pods --namespace=test-namespace-dev $pod | grep -i jenkins | awk '{print $3}' | grep -i Running" 0
+
   pod="$(kubectl get pods --namespace=test-namespace-dev | grep -oEi 'jenkins-[0-9a-z]+-[0-9a-z]+')"
 
   kubectl exec $pod --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-dev
