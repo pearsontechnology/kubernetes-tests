@@ -28,8 +28,8 @@ load helpers
       kubectl delete ns test-namespace-qa
     fi
   fi
-  sleep 10
-  
+  sleep 20
+
   kubectl create ns test-namespace-dev
   kubectl create ns test-namespace-prd
   kubectl create ns test-namespace-qa
