@@ -22,7 +22,7 @@ spec:
           secretName: test-runner-secrets
       containers:
       - name: testexecutor
-        image: pearsontechnology/test-executor-app:dev
+        image: pearsontechnology/test-executor-app:1.0.1
         volumeMounts:
         - mountPath: /etc/secret-volume
           name: secret-volume
