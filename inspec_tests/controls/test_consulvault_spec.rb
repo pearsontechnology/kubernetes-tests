@@ -52,9 +52,17 @@ describe service('consul') do
   it { should be_enabled }
   it { should be_running }
 end
-describe service('vault') do
-  it { should be_enabled }
-  it { should be_running }
+describe command('systemctl is-enabled consul') do
+  its('exit_status') { should eq 0 }
+end
+describe command('systemctl is-active consul') do
+  its('exit_status') { should eq 0 }
+end
+describe command('systemctl is-enabled vault') do
+  its('exit_status') { should eq 0 }
+end
+describe command('systemctl is-active vault') do
+  its('exit_status') { should eq 0 }
 end
 describe port(8500) do
   it { should be_listening }
@@ -65,10 +73,6 @@ describe port(8543) do
   its('processes') {should include 'consul'}
 end
 describe port(8300) do
-  it { should be_listening }
-  its('processes') {should include 'consul'}
-end
-describe port(8400) do
   it { should be_listening }
   its('processes') {should include 'consul'}
 end
