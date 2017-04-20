@@ -13,6 +13,31 @@ values_equal () {
     return 1
   fi
 }
+wait-for-success() {
+  count=0
+  while [ "$count" -le $2 ]; do
+    $1
+    if [ "$?" -eq 0 ]; then
+      return $?
+    else
+      count=$((count+1))
+      sleep 5
+    fi
+  done
+}
+
+wait-for-nonzero-code() {
+  count=0
+  while [ "$count" -le $2 ]; do
+    $1
+    if [ "$?" -eq 1 ]; then
+      return 0
+    else
+      count=$((count+1))
+      sleep 5
+    fi
+  done
+}
 
 # min_value_met takes 2 values, both must be non-null and 2 must be equal or greater than 1
 min_value_met () {
