@@ -15,7 +15,7 @@ values_equal () {
 }
 wait-for-success() {
   count=0
-  while [ "$count" -le $2 ]; do
+  while [ "$count" -le 24 ]; do
     $1
     if [ "$?" -eq 0 ]; then
       return $?
@@ -28,7 +28,7 @@ wait-for-success() {
 
 wait-for-nonzero-code() {
   count=0
-  while [ "$count" -le $2 ]; do
+  while [ "$count" -le 24 ]; do
     $1
     if [ "$?" -eq 1 ]; then
       return 0

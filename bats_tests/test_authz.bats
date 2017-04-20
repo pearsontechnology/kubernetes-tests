@@ -29,10 +29,10 @@ load helpers
     fi
   fi
 
-  #Wait for NS deletion (25 x 5sec)
-  wait-for-nonzero-code "kubectl get ns test-namespace-prd" 25
-  wait-for-nonzero-code "kubectl get ns test-namespace-stg" 25
-  wait-for-nonzero-code "kubectl get ns test-namespace-dev" 25
+  #Wait for NS deletion (2 min max wait for command to come back non-zero)
+  wait-for-nonzero-code "kubectl get ns test-namespace-prd"
+  wait-for-nonzero-code "kubectl get ns test-namespace-stg"
+  wait-for-nonzero-code "kubectl get ns test-namespace-dev"
 
   kubectl create ns test-namespace-dev
   kubectl create ns test-namespace-prd
@@ -40,8 +40,8 @@ load helpers
 
   kubectl create -f $assets_folder/jenkins-dep.yaml
 
-  #Wait for jenkins pod creation (25 x 5sec)
-  wait-for-success "kubectl get pods --namespace=test-namespace-dev $pod | grep -i jenkins | awk '{print $3}' | grep -i Running" 25
+  #Wait for jenkins pod creation (2 min max wait for command to come back with zero exit code)
+  wait-for-success "kubectl get pods --namespace=test-namespace-dev $pod | grep -i jenkins | awk '{print $3}' | grep -i Running"
 
   kubectl exec $pod --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-dev
   kubectl exec $pod --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-qa
