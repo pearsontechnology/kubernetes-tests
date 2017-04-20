@@ -6,6 +6,29 @@ load helpers
 
 @test "Test Authz service account access for namespaces" {
   assets_folder="/tmp/kubernetes-tests/test_assets"
+
+
+  run kubectl get ns test-namespace-dev
+  if [ "$status" -eq 0 ]; then
+    if [ "$output" != "" ]; then
+      kubectl delete ns test-namespace-dev
+    fi
+  fi
+
+  run kubectl get ns test-namespace-prd
+  if [ "$status" -eq 0 ]; then
+    if [ "$output" != "" ]; then
+      kubectl delete ns test-namespace-prd
+    fi
+  fi
+
+  run kubectl get ns test-namespace-qa
+  if [ "$status" -eq 0 ]; then
+    if [ "$output" != "" ]; then
+      kubectl delete ns test-namespace-qa
+    fi
+  fi
+
   kubectl create ns test-namespace-dev
   kubectl create ns test-namespace-prd
   kubectl create ns test-namespace-qa
