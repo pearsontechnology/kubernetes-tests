@@ -16,9 +16,10 @@ values_equal () {
 wait-for-success() {
   count=0
   while [ "$count" -le 24 ]; do
-    output=$1
-    if [ "$output" -eq 0 ]; then
-      return $output
+    output=$($1)
+    code=$?
+    if [ "$code" -eq 0 ]; then
+      return $code
     else
       count=$((count+1))
       sleep 5
@@ -29,8 +30,9 @@ wait-for-success() {
 wait-for-nonzero-code() {
   count=0
   while [ "$count" -le 24 ]; do
-    output=$1
-    if [ "$output" -eq 1 ]; then
+    output=$($1)
+    code=$?
+    if [ "$code" -eq 1 ]; then
       return 0
     else
       count=$((count+1))
