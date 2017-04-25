@@ -1,0 +1,93 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: jenkins
+  name: jenkins
+  namespace: test-namespace-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: jenkins
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: jenkins
+      name: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        env:
+        - name: JAVA_OPTS
+          value: -Djava.awt.headless=true -Xms512m -Xmx2g -XX:MaxPermSize=1048M -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York
+            -Dcom.sun.management.jmxremote.local.only=false
+        - name: JENKINS_URL
+          value: jenkinsurl
+        - name: JENKINS_ADMIN_USER
+          value: jenkinsuser
+        - name: JENKINS_ADMIN_PASSWORD
+          value: jenkinspass
+        - name: DOCKER_REGISTRY
+          value: bitesize-registry.default.svc.cluster.local:5000
+        - name: SEED_JOBS_REPO
+          value: seed-job-url
+        - name: GIT_PRIVATE_KEY
+          value: privatekey
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        image: bitesize-registry.default.svc.cluster.local:5000/geribatai/jenkins:3.4.37
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 1000
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-data
+        - mountPath: /var/jenkins_home/repository
+          name: aptly-repository
+      - image: geribatai/aptly:1.0.0
+        imagePullPolicy: Always
+        name: aptly
+        ports:
+        - containerPort: 9797
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /aptly
+          name: aptly-repository
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: jenkins-data
+      - emptyDir: {}
+        name: aptly-repository
