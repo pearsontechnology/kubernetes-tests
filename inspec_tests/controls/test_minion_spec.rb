@@ -118,6 +118,9 @@ end
 describe file('/etc/dnsmasq_hosts') do
   it {should exist}
 end
+describe port(53) do
+  it { should be_listening }
+end
 describe mount('/') do
   it { should be_mounted }
   its('type') { should eq  'xfs' }

@@ -103,7 +103,6 @@ describe file('/etc/dnsmasq_hosts') do
 end
 describe port(53) do
   it { should be_listening }
-  its('processes') {should include 'dnsmasq'}
 end
 describe mount('/') do
   it { should be_mounted }
