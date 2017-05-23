@@ -99,3 +99,7 @@ describe mount('/mnt/docker') do
   it { should be_mounted }
   its('type') { should eq 'btrfs'}
 end
+describe file('/etc/kubernetes/auth/basic_auth.csv') do
+  its('mode') { should cmp '0600' }
+  its('owner') { should eq 'root' }
+end
