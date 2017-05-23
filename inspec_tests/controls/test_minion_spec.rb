@@ -106,10 +106,10 @@ end
 describe file('/etc/resolv.conf.pods') do
   it {should exist}
 end
+describe file('/etc/resolv.conf.kubedns') do
+    it {should exist}
+end
 describe file('/etc/hosts') do
-    describe file('/etc/resolv.conf.kubedns') do
-        it {should exist}
-    end
   its('content') { should match(%r{^127.0.0.1\s.*?localhost.*$}) }
 end
 describe file('/etc/dnsmasq.conf') do
