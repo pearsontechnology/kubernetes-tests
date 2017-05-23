@@ -57,3 +57,8 @@ load helpers
   GRAFANA_CURRENT=`kubectl get rc grafana --namespace=default -o jsonpath='{.status.replicas}'`
   values_equal $GRAFANA_DESIRED $GRAFANA_CURRENT
 }
+
+@test "pod-authentication-with-K8S-API response" {
+  curl -k -N -X GET -u admin:${KUBE_PASS} https://$KUBERNETES_SERVICE_HOST:443/api/v1/
+  K8S_API_RESPONSE=`echo $?`
+  values_equal $K8S_API_RESPONSE 0
