@@ -50,7 +50,3 @@ load helpers
 @test "sysdig-agent" {
   kubectl get pods --namespace=kube-system --no-headers | grep sysdig-agent | grep Running
 }
-
-@test "pod-authentication-with-K8S-API" {
-  curl -k -N -X GET -u admin:${KUBE_PASS} https://$KUBERNETES_SERVICE_HOST:443/api/v1/
-}
