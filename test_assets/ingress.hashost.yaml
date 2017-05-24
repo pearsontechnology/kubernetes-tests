@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  generation: 5
+  labels:
+    httpsBackend: "true"
+    httpsOnly: "true"
+    ssl: "true"
+  name: ingress-host-test
+  namespace: kube-system
+spec:
+  rules:
+  - host: ingress-host-test.prsn-dev.io
+    http:
+      paths:
+      - backend:
+          serviceName: ingress-host-test
+          servicePort: 8543
+        path: /
+status:
+  loadBalancer: {}

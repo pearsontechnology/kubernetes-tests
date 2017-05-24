@@ -4,7 +4,7 @@ metadata:
   labels:
     name: jenkins
   name: jenkins
-  namespace: test-runner
+  namespace: test-namespace-dev
 spec:
   replicas: 1
   selector:
@@ -17,45 +17,28 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         name: jenkins
       name: jenkins
     spec:
       containers:
-      - env:
+      - name: jenkins
+        env:
         - name: JAVA_OPTS
           value: -Djava.awt.headless=true -Xms512m -Xmx2g -XX:MaxPermSize=1048M -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York
             -Dcom.sun.management.jmxremote.local.only=false
+        - name: JENKINS_URL
+          value: jenkinsurl
         - name: JENKINS_ADMIN_USER
-          valueFrom:
-            secretKeyRef:
-              name: test-runner-secrets
-              key: jenkins-user
+          value: jenkinsuser
         - name: JENKINS_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: test-runner-secrets
-              key: jenkins-pass
+          value: jenkinspass
         - name: DOCKER_REGISTRY
           value: bitesize-registry.default.svc.cluster.local:5000
         - name: SEED_JOBS_REPO
-          value: git@github.com:pearsontechnology/kubernetes-tests.git
-        - name: GIT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: test-runner-secrets
-              key: git-username
-        - name: GIT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: test-runner-secrets
-              key: git-password
+          value: seed-job-url
         - name: GIT_PRIVATE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: test-runner-secrets
-              key: git-key
+          value: privatekey
         - name: MY_POD_IP
           valueFrom:
             fieldRef:
@@ -71,24 +54,23 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        image: bitesize-registry.default.svc.cluster.local:5000/geribatai/jenkins:3.4.32
+        image: bitesize-registry.default.svc.cluster.local:5000/geribatai/jenkins:3.4.37
         imagePullPolicy: Always
-        name: jenkins
+        securityContext:
+          runAsUser: 1000
         ports:
         - containerPort: 8080
           protocol: TCP
         - containerPort: 50000
           protocol: TCP
         resources: {}
-        securityContext:
-          runAsUser: 1000
         terminationMessagePath: /dev/termination-log
         volumeMounts:
         - mountPath: /var/jenkins_home
           name: jenkins-data
         - mountPath: /var/jenkins_home/repository
           name: aptly-repository
-      - image: geribatai/aptly:1.0
+      - image: geribatai/aptly:1.0.0
         imagePullPolicy: Always
         name: aptly
         ports:
