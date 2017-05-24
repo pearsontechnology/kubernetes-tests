@@ -57,4 +57,3 @@ load helpers
   GRAFANA_CURRENT=`kubectl get rc grafana --namespace=default -o jsonpath='{.status.replicas}'`
   values_equal $GRAFANA_DESIRED $GRAFANA_CURRENT
 }
-
