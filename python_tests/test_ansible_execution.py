@@ -12,7 +12,7 @@ def run_script(command):
     return stdout,stderr,errorCode
 
 def test_no_ansible_playbook_failures_on_stackstorm_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -23,7 +23,7 @@ def test_no_ansible_playbook_failures_on_stackstorm_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_authn_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -34,7 +34,7 @@ def test_no_ansible_playbook_failures_on_authn_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_loadbalancer_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -45,7 +45,7 @@ def test_no_ansible_playbook_failures_on_loadbalancer_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_nfs_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -56,7 +56,7 @@ def test_no_ansible_playbook_failures_on_nfs_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_bastion_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -67,7 +67,7 @@ def test_no_ansible_playbook_failures_on_bastion_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_minion_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -80,7 +80,7 @@ def test_no_ansible_playbook_failures_on_minion_nodes():
 #def test_nfs_nodes_clone_correct_ansible_branch():
 #    ec2 = boto3.client('ec2', region_name=os.environ["REGION"])
 #    ansible_branch=os.environ["ANSIBLE_BRANCH"]
-#    hostYaml="/var/hosts.yaml"
+#    hostYaml="/opt/testexecutor/hosts.yaml"
 #    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
 #        contents = yaml.load(ymlfile1)
 #        for host in contents['hosts']:
@@ -93,7 +93,7 @@ def test_no_ansible_playbook_failures_on_minion_nodes():
 
 #def test_bastion_nodes_clone_correct_ansible_branch():
 #    ansible_branch=os.environ["ANSIBLE_BRANCH"]
-#    hostYaml="/var/hosts.yaml"
+#    hostYaml="/opt/testexecutor/hosts.yaml"
 #    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
 #        contents = yaml.load(ymlfile1)
 #        for host in contents['hosts']:
@@ -105,7 +105,7 @@ def test_no_ansible_playbook_failures_on_minion_nodes():
 #                assert errorCode == 0   #If error code is zero, then ANSIBLE_BRANCH was used to clone the ansible-roles repo
 def test_stackstorm_nodes_clone_correct_ansible_branch():
     ansible_branch=os.environ["ANSIBLE_BRANCH"]
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -117,7 +117,7 @@ def test_stackstorm_nodes_clone_correct_ansible_branch():
                 assert errorCode == 0   #If error code is zero, then ANSIBLE_BRANCH was used to clone the ansible-roles repo
 def test_authn_nodes_clone_correct_ansible_branch():
     ansible_branch=os.environ["ANSIBLE_BRANCH"]
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -129,7 +129,7 @@ def test_authn_nodes_clone_correct_ansible_branch():
                 assert errorCode == 0   #If error code is zero, then ANSIBLE_BRANCH was used to clone the ansible-roles repo
 def test_loadbalancer_nodes_clone_correct_ansible_branch():
     ansible_branch=os.environ["ANSIBLE_BRANCH"]
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
@@ -141,7 +141,7 @@ def test_loadbalancer_nodes_clone_correct_ansible_branch():
                 assert errorCode == 0   #If error code is zero, then ANSIBLE_BRANCH was used to clone the ansible-roles repo
 def test_minion_nodes_clone_correct_ansible_branch():
     ansible_branch=os.environ["ANSIBLE_BRANCH"]
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
