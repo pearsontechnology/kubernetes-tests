@@ -17,13 +17,13 @@ def run_script(command, output):
         print "{0}".format(stdout)
         print "{0}".format(stderr)
 
-def test_no_error_on_dns_lookup():
+def test_outbound_internet_connectivity_from_minions():
     hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                command="ssh -i ~/.ssh/bitesize.key centos@{0} 'ping -c 4 8.8.8.8 | grep -o '4 received''".format(host['value'])
+                command="ssh -i ~/.ssh/bitesize.key centos@{0} 'ping -c 4 8.8.8.8 | grep -o '4 packets received''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout, stderr = process.communicate()
                 errorCode = process.returncode
