@@ -23,7 +23,7 @@ def test_outbound_internet_connectivity_from_minions():
         for host in contents['hosts']:
             if ("minion" in host['name']):
                 # Verify outbound Internet connectivity from minion hosts by ping to 8.8.8.8 (Google DNS)
-                command="ssh -i ~/.ssh/bitesize.key centos@{0} 'ping -c 1 8.8.8.8 | grep -o '4 packets received''".format(host['value'])
+                command="ssh -i ~/.ssh/bitesize.key centos@{0} 'ping -c 4 8.8.8.8 | grep -o '4 packets received''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout, stderr = process.communicate()
                 errorCode = process.returncode
