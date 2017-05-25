@@ -1,8 +1,9 @@
 #!/usr/bin/python
 import boto3
 import os
-import yaml
 from subprocess import Popen, PIPE
+import yaml
+
 
 def run_script(command, output):
     global failuresReceived
@@ -16,15 +17,14 @@ def run_script(command, output):
         print "{0}".format(stdout)
         print "{0}".format(stderr)
 
-def test_outbound_internet_connectivity_from_minions():
+def test_no_error_on_dns_lookup():
     hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                # Verify outbound Internet connectivity from minion hosts by ping to 8.8.8.8 (Google DNS)
                 command="ssh -i ~/.ssh/bitesize.key centos@{0} 'ping -c 4 8.8.8.8 | grep -o '4 packets received''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout, stderr = process.communicate()
                 errorCode = process.returncode
-                assert errorCode == 0   #If Error Code is zere, then a minion has outbound connectivity to the Internet
+                assert errorCode == 0   #If Error Code is zero, then the ping to Google DNS has received 4 return packets
