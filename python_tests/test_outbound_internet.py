@@ -12,7 +12,7 @@ def run_script(command):
     return stdout,stderr,errorCode
 
 def test_outbound_internet_connectivity_from_minions():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
