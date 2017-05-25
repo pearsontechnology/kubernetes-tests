@@ -78,7 +78,7 @@ def test_no_ansible_playbook_failures_on_minion_nodes():
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def test_no_ansible_playbook_failures_on_consulvault_nodes():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
