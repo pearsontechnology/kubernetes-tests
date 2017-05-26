@@ -26,4 +26,4 @@ def test_outbound_internet_connectivity_from_minions():
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout, stderr = process.communicate()
                 errorCode = process.returncode
-                assert errorCode != 0   #If Error Code is zero, then
+                assert errorCode != 0   #If Error Code is zero, a reply has not been received from ping to Google DNS
