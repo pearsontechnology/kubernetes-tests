@@ -16,9 +16,14 @@ def run_script(command, output):
         print "{0}".format(stdout)
         print "{0}".format(stderr)
 
-def test_outbound_internet_connectivity_from_minions(domain,ip):
-    command = "ssh -i ~/.ssh/bitesize.key centos@{0} 'TIMEFORMAT=%R;time dig $domain'".format(ip)
-    process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    stdout, stderr = process.communicate()
-    errorCode = process.returncode
-    return stderr
+def test_outbound_internet_connectivity_from_minions():
+    hostYaml="/opt/testexecutor/hosts.yaml"
+    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
+        contents = yaml.load(ymlfile1)
+        for host in contents['hosts']:
+            if ("master" in host['name']):
+                command="ssh -i ~/.ssh/bitesize.key root@{0} 'dig google.com | grep -o 'status: NOERROR''".format(host['value'])
+                process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+                stdout, stderr = process.communicate()
+                errorCode = process.returncode
+                assert errorCode == 0   #If Error Code is zero, then
