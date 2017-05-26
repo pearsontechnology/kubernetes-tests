@@ -4,7 +4,7 @@ import os
 import yaml
 from subprocess import Popen, PIPE
 
-def run_script(command):
+def run_script(command, output):
     global failuresReceived
     process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
