@@ -12,7 +12,6 @@ def test_outbound_internet_connectivity_from_minions():
             if ("minion" in host['name']):
                 command="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} 'curl -L -I www.google.com | grep -o '200 OK' | cut -c1-3'".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                stdout, stderr = process.communicate()
                 response = process.stdout.read()
                 assert response == 200   #If Error Cod
 
