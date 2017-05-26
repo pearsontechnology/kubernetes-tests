@@ -21,8 +21,8 @@ def test_outbound_internet_connectivity_from_minions():
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
-            if ("master" in host['name']):
-                command="ssh -i ~/.ssh/bitesize.key root@{0} 'dig google.com | grep -o 'status: NOERROR''".format(host['value'])
+            if ("minion" in host['name']):
+                command="ssh -i ~/.ssh/bitesize.key centos@{0} 'dig google.com | grep -o 'status: NOERROR''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout, stderr = process.communicate()
                 errorCode = process.returncode
