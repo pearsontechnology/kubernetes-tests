@@ -1,7 +1,8 @@
+#!/usr/bin/python
 import boto3
 import os
-import yaml
 from subprocess import Popen, PIPE
+import yaml
 
 def run_script(command, output):
     global failuresReceived
@@ -23,6 +24,6 @@ def test_outbound_internet_connectivity_from_minions():
             if ("minion" in host['name']):
                 command="ssh -i ~/.ssh/bitesize.key root@{0} 'curl -L -I www.google.com | grep -o '200 OK''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                stdout,stderr = process.communicate()
+                stdout, stderr = process.communicate()
                 errorCode = process.returncode
-                assert errorCode == 0   #If the Error Code is zero, Google returned a 200 OK 
+                assert errorCode == 0   #If the Error Code is zero, Google returned a 200 OK
