@@ -10,7 +10,7 @@ def test_outbound_internet_connectivity_from_minions():
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                command="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} 'curl -L -I www.google.com | grep -o '200 OK' | cut -c1-3'".format(host['value'])
+                command="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} "curl -L -I www.google.com | grep -o '200 OK' | cut -c1-3"".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 response = process.stdout.read()
                 responseinteger = int(response)
