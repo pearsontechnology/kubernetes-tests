@@ -16,7 +16,6 @@ def test_outbound_internet_connectivity_from_minions():
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                returncode =
                 command="ssh -i ~/.ssh/bitesize.key root@{0} 'curl -L -I www.google.com | grep -o '200 OK''".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout,stderr,errorCode=run_script(command)
