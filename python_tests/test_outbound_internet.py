@@ -1,6 +1,7 @@
 import boto3
 import os
 import yaml
+import sys
 from subprocess import Popen, PIPE
 
 def run_script(command):
@@ -16,8 +17,8 @@ def test_outbound_internet_connectivity_from_minions():
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                command="ssh -i ~/.ssh/bitesize.key root@{0} 'curl -L -I www.google.com | grep -o '200' | head -n 1".format(host['value'])
+                command="ssh -i ~/.ssh/bitesize.key root@{0} 'curl -L -I www.google.com | grep -o '200 OK'".format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 stdout,stderr,errorCode=run_script(command)
                 returncode = sys.stdout.getline().strip()
-                assert returncode == 200   #If returncode = 200, www.google.com returns 200 OK
+                assert returncode == '200 OK'   #If returncode = 200, www.google.com returns 200 OK
