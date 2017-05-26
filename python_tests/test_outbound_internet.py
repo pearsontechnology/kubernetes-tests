@@ -1,7 +1,7 @@
 import boto3
 import os
-from subprocess import Popen, PIPE
 import yaml
+from subprocess import Popen, PIPE
 
 def run_script(command):
     global failuresReceived
