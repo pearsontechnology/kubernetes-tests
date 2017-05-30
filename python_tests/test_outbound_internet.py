@@ -13,6 +13,5 @@ def test_outbound_internet_connectivity_from_minions():
                 command = """ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{} "curl -L -I www.google.com | grep -o '200 OK'" """.format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 response = process.stdout.read()
-                print response
                 if response.rstrip() != '200 OK':
                     raise Exception('No response from www.google.com')
