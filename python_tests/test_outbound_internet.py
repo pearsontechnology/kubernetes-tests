@@ -14,5 +14,5 @@ def test_outbound_internet_connectivity_from_minions():
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 response = process.stdout.read()
                 print response
-                if response.rstrip() ! == '200 OK':
+                if response.rstrip() != '200 OK':
                     raise Exception('No response from www.google.com')
