@@ -10,8 +10,11 @@ def test_outbound_internet_connectivity_from_minions():
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
             if ("minion" in host['name']):
-                command="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} "curl -L -I www.google.com | grep -o '200 OK' | cut -c1-3"".format(host['value'])
+                command = """ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{} "curl -L -I www.google.com | grep -o '200 OK'" """.format(host['value'])
                 process = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 response = process.stdout.read()
-                responseinteger = int(response)
-                assert responseinteger == 200   #if responseinteger is 200, a HTTP 200 response was obtained from Google
+                print response
+                if response.rstrip() == '200 OK':
+                    print ('HTTP 200 OK response from www.google.com')
+                else:
+                    raise Exception('No response from www.google.com')
