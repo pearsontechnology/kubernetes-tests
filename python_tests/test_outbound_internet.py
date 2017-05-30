@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import boto3
 import os
 from subprocess import Popen, PIPE
 import yaml
