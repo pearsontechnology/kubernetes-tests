@@ -16,8 +16,9 @@ values_equal () {
 
 run_command_on_master() {
   masterip=`cat /opt/testexecutor/hosts.yaml | grep -A1 master | grep value | awk '{print $2}'`
-  ssh -i ~/.ssh/bitesize.key  -o StrictHostKeyChecking=no centos@${masterip} $1
+  ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@$masterip "'$1'"
 }
+
 wait-for-code() {
   count=0
   while [ "$count" -le 24 ]; do
