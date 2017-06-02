@@ -18,8 +18,14 @@ def run_script(command, output):
     return stdout, stderr, errorCode
 
 def test_hello_world_app_responds_through_bitesize_front_end():
-    #cmd = "curl -s -m 5 -o /dev/null -w \"%{http_code}\" -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io | grep 200"
-    cmd = "curl -m 5 -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io"
-    stdout = run_script(cmd, False)
-    #print "Stdout: {0}".format(stdout[0])
-    assert stdout[0] == "{\"status\":\"SUCCESS\"}"
+    hostYaml="/opt/testexecutor/hosts.yaml"
+    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
+        contents = yaml.load(ymlfile1)
+        for host in contents['hosts']:
+            if ("master" in host['name']):
+                ip=host['value']
+                curl = "curl -m 5 -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io"
+                cmd="ssh -i ~/.ssh/bitesize.key centos@{0} '{1}'".format(ip,curl)
+                stdout = run_script(cmd, False)
+                #print "Stdout: {0}".format(stdout[0])
+                assert stdout[0] == "{\"status\":\"SUCCESS\"}"
