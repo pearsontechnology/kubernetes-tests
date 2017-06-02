@@ -21,4 +21,4 @@ def run_script(command, output):
 def test_hello_world_app_responds_through_bitesize_front_end():
     cmd = "curl -s -m 5 -o /dev/null -w \"%{http_code}\" -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io | grep 200"
     stdout = run_script(cmd, False)
-    assert stdout = "200"
+    assert stdout == "200"
