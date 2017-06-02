@@ -19,7 +19,7 @@ def run_script(command, output):
 
 def test_hello_world_app_responds_through_bitesize_front_end():
     #cmd = "curl -s -m 5 -o /dev/null -w \"%{http_code}\" -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io | grep 200"
-    cmd = "curl -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io"
+    cmd = "curl -m 5 -X POST -H 'Host: front.nodejs-hello-world-app.prsn-dev.io' -H \"Content-Type: application/json\" -d '{\"data\": \"blah\", \"username\": \"admin\", \"password\": \"password\"}' http://front.nodejs-hello-world-app.prsn-dev.io"
     stdout = run_script(cmd, False)
     #print "Stdout: {0}".format(stdout[0])
     assert stdout[0] == "{\"status\":\"SUCCESS\"}"
