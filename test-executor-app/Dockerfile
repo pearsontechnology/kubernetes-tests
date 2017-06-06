@@ -23,7 +23,7 @@ RUN gem install inspec
 RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
 
 #Install Kubernetes kubectl
-RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.2.2/bin/linux/amd64/kubectl
+RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.5.7/bin/linux/amd64/kubectl
 
 COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor
