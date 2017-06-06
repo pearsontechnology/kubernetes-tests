@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export KUBE_TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
-export NAMESPACE=`cat /var/run/secrets/kubernetes.io/serviceaccount/namespace`
-
 stackips=`aws ec2 describe-instances --region=${REGION} --filters "Name=tag:Environment,Values=${ENVIRONMENT}" "Name=tag:Stack,Values=${STACK_ID}" "Name=instance-state-code,Values=16" | jq '.Reservations[].Instances[].PrivateIpAddress' | sed -e 's/\"//g'`
 bastion=`aws ec2 describe-instances --region=${REGION} --filters "Name=tag:Environment,Values=${ENVIRONMENT}" "Name=tag:Name,Values=bastion.${ENVIRONMENT}.kube" "Name=instance-state-code,Values=16" | jq '.Reservations[].Instances[].PrivateIpAddress' | sed -e 's/\"//g'`
 nfs=`aws ec2 describe-instances --region=${REGION} --filters "Name=tag:Environment,Values=${ENVIRONMENT}" "Name=tag:Name,Values=nfs.${ENVIRONMENT}.kube" "Name=instance-state-code,Values=16" | jq '.Reservations[].Instances[].PrivateIpAddress' | sed -e 's/\"//g'`
