@@ -49,7 +49,7 @@ load helpers
   kubectl exec $pod --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-qa
   kubectl exec $pod  --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-prd
 
-  kubectl delete -f $assets_folder/jenkins-dep.yaml
+  kubectl delete -f $assets_folder/jenkins-dep.yaml --namespace=test-namespace-dev
   kubectl delete ns test-namespace-dev
   kubectl delete ns test-namespace-prd
   kubectl delete ns test-namespace-qa
