@@ -20,7 +20,7 @@ print_pod_logs(){
   echo
 
   if [[ $successfulPodCount -eq 1 ]]; then  #If there is one pod, get logs for it
-    lastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep -v '\[\]' | sort -r | head -n 2 | grep testexecutor | awk '{print $5}')
+    lastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | sort -r | head -n 2 | grep testexecutor | awk '{print $2}')
     echo
     echo "------------------------------------------------------------------------"
     echo "---------- Test Output From Pod:  ${lastPod} ---------------"
@@ -29,7 +29,7 @@ print_pod_logs(){
     kubectl logs $lastPod --namespace=test-runner
 
   else
-    nextToLastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep -v '\[\]' | sort -r | head -n 3 | tail -n 1 | grep testexecutor | awk '{print $5}')
+    nextToLastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | sort -r | head -n 3 | tail -n 1 | grep testexecutor | awk '{print $2}')
     echo
     echo "------------------------------------------------------------------------"
     echo "----------    Test Output From Pod :  ${nextToLastPod} -----------------"
