@@ -1,9 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: testexecutor
   namespace: test-runner
 spec:
+  manualSelector: true
   selector:
     matchLabels:
       app: testexecutor
@@ -54,8 +55,14 @@ spec:
           value: "%%DEBUG%%"
         - name: KUBE_PASS
           value: "%%KUBE_PASS%%"
+        - name: KUBERNETES_VERSION
+          value: "%%KUBERNETES_VERSION%%"
         - name: MINION_COUNT
           value: "%%MINION_COUNT%%"
+        - name: CONSUL_MASTER_TOKEN
+          value: "%%CONSUL_MASTER_TOKEN%%"
+        - name: DOMAIN
+          value: "%%DOMAIN%%"
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:

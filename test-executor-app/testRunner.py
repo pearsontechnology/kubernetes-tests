@@ -7,7 +7,7 @@ import yaml
 import argparse
 import os
 import time
-from github import Github
+#from github import Github
 import urlparse
 import urllib
 
@@ -21,8 +21,9 @@ GIT_USERNAME = os.environ['GIT_USERNAME']
 GIT_PASSWORD = os.environ['GIT_PASSWORD']
 GIT_REPO = os.environ['GIT_REPO']
 GIT_BRANCH = os.environ['GIT_BRANCH']
+DEBUG = os.environ['DEBUG']
 
-g = Github(GIT_USERNAME, GIT_PASSWORD)
+#g = Github(GIT_USERNAME, GIT_PASSWORD)
 
 def clone_repo(name, url, directory):
     parts = urlparse.urlparse(url)
@@ -138,8 +139,12 @@ DEBUG = str_to_bool(os.environ['DEBUG'])
 clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-tests.git", "/tmp/kubernetes-tests")
 
 executeInspecTests(testType, testFiles)
-executePythonTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
+executePythonTests(testType, testFiles)
+
+if DEBUG != "FALSE": #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
+    while True:
+        time.sleep(5)
 
 if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
     while True:
