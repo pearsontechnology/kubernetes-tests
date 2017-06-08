@@ -13,7 +13,6 @@ values_equal () {
     return 1
   fi
 }
-
 wait-for-code() {
   count=0
   while [ "$count" -le 24 ]; do
