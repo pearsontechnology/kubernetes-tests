@@ -76,8 +76,8 @@ def cleanup(st2host):
     errorCode,stderr=delete_ns(st2host, "kubetests-jnk")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-    errorCode,stderr=delete_r53(st2host)
-    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+    #errorCode,stderr=delete_r53(st2host)
+    #assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def delete_ns(st2host, ns):
     data = {"action": "kubernetes.deleteCoreV1Namespace",
@@ -89,20 +89,20 @@ def delete_ns(st2host, ns):
 
     return run_st2(st2host, data)
 
-def delete_r53(st2host):
-
-    env = os.environ["ENVIRONMENT"]
-    domain = os.environ["DOMAIN"]
-    cname = 'kubetests.' + env + '.' + domain
-
-    data = {"action": "aws.r53_zone_delete_cname",
-            "user": None,
-            "parameters": {
-                "name": cname,
-                "zone": domain}
-           }
-
-    return run_st2(st2host, data)
+#def delete_r53(st2host):
+#
+#    env = os.environ["ENVIRONMENT"]
+#    domain = os.environ["DOMAIN"]
+#    cname = 'kubetests.' + env + '.' + domain
+#
+#    data = {"action": "aws.r53_zone_delete_cname",
+#            "user": None,
+#            "parameters": {
+#                "name": cname,
+#                "zone": domain}
+#           }
+#
+#    return run_st2(st2host, data)
 
 def create_project(st2host):
 
