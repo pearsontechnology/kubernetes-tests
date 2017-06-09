@@ -16,7 +16,7 @@ def test_hello_world_app_is_accessable_through_bitesize_front_end():
             for host in contents['hosts']:
                 if ("master" in host['name']):
                     ip=host['value']
-                    curlcmd = "curl -X POST -H \"Host: front.nodejs-hello-world-app.prsn-dev.io\" -H \"Content-Type: application/json\" -d \"{\\\"data\\\": \\\"blah\\\", \\\"username\\\": \\\"admin\\\", \\\"password\\\": \\\"password\\\"}\" http://front.nodejs-hello-world-app.{0}.{1}".format(env,dom)
+                    curlcmd = "curl -X POST -H \"Host: front.nodejs-hello-world-app.prsn-dev.io\" -H \"Content-Type: application/json\" -d \"{\\\"data\\\": \\\"blah\\\", \\\"username\\\": \\\"admin\\\", \\\"password\\\": \\\"password\\\"}\" http://front.nodejs-hello-world-app." + env + "." + dom
                     cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlcmd)
 
                     process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
