@@ -28,7 +28,7 @@ def test_consul_read_and_write():
                     #print "errorCode:{0}".format(errorCode)
                     assert stdout == "true"
 
-                    curlread = "curl -ks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2} | jq '.[0].Value' | sed -e s/\"//g | base64 -d".format(env,dom,token)
+                    curlread = "curl -ks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2} | jq '.[0].Value'".format(env,dom,token)
                     cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlread)
                     process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                     stdout, stderr = process.communicate()
@@ -36,4 +36,4 @@ def test_consul_read_and_write():
                     #print "Stdout:{0}".format(stdout)
                     #print "Stderr:{0}".format(stderr)
                     #print "errorCode:{0}".format(errorCode)
-                    assert stdout == "test_value"
+                    assert errorCode == 0
