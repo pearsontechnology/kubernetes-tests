@@ -13,7 +13,7 @@ RUN python get-pip.py
 RUN apt-get update --fix-missing && apt-get install -y python-dev jq git-all
 
 #Install Python Dependencies
-RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures
+RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures requests
 RUN pip install PyGithub==1.28 requests
 
 #Install INSPEC
@@ -23,7 +23,7 @@ RUN gem install inspec
 RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
 
 #Install Kubernetes kubectl
-RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.2.2/bin/linux/amd64/kubectl
+RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.5.7/bin/linux/amd64/kubectl
 
 COPY testRunner.py /opt/testexecutor
 COPY run.sh /opt/testexecutor

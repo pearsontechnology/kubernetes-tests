@@ -21,7 +21,6 @@ GIT_USERNAME = os.environ['GIT_USERNAME']
 GIT_PASSWORD = os.environ['GIT_PASSWORD']
 GIT_REPO = os.environ['GIT_REPO']
 GIT_BRANCH = os.environ['GIT_BRANCH']
-DEBUG = os.environ['DEBUG']
 
 #g = Github(GIT_USERNAME, GIT_PASSWORD)
 
@@ -38,9 +37,9 @@ def clone_repo(name, url, directory):
     run_script(command,True)
 
 def str_to_bool(s):
-    if s == 'TRUE':
+    if s.lower() == "true":
          return True
-    elif s == 'FALSE':
+    else:
          return False
 
 def print_test_msg(testType):
@@ -72,7 +71,7 @@ def executeTest(hostname, ip, testFiles=None):
                         cmd = "echo \"Host {0}\n\tStrictHostKeyChecking no\n\" >> ~/.ssh/config".format(ip)
                         run_script(cmd, False)
                         if (testFiles is None):  # Execute all tests
-                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm"):
+                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm" or resourceName == "consulvault"):
                                 cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
                                 cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
@@ -81,7 +80,7 @@ def executeTest(hostname, ip, testFiles=None):
                             run_script(cmd, True)
                         # Execute only tests that match those files passed in
                         elif ((testFiles is not None) and (test in testFiles)):
-                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm"):
+                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm" or resourceName == "consulvault"):
                                 cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
                                 cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
@@ -141,10 +140,6 @@ clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-
 executeInspecTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
 executePythonTests(testType, testFiles)
-
-if DEBUG != "FALSE": #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
-    while True:
-        time.sleep(5)
 
 if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
     while True:
