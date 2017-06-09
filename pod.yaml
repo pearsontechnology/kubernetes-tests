@@ -46,5 +46,9 @@ spec:
         value: "%%MINION_COUNT%%"
       - name: DEBUG
         value: "%%DEBUG%%"
+      - name: CONSUL_MASTER_TOKEN
+        value: "%%CONSUL_MASTER_TOKEN%%"
+      - name: DOMAIN
+        value: "%%DOMAIN%%"
   nodeSelector:
     role: minion
