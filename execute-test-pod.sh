@@ -56,6 +56,8 @@ sed -i '' -e "s/%%GIT_BRANCH%%/$TEST_BRANCH/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%KUBE_PASS%%/$KUBE_PASS/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" pod-temp.yaml > /dev/null 2>&1
 sed -i '' -e "s/%%DEBUG%%/$DEBUG/" pod-temp.yaml > /dev/null 2>&1
+sed -i '' -e "s/%%DOMAIN%%/$DOMAIN/" pod-temp.yaml > /dev/null 2>&1
+sed -i '' -e "s/%%CONSUL_MASTER_TOKEN%%/$CONSUL_MASTER_TOKEN/" pod-temp.yaml > /dev/null 2>&1
 
 if  [[ $(kubectl get pod testpod --namespace=test-runner) ]]
 then
