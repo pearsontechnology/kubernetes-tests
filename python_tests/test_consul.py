@@ -25,7 +25,7 @@ def test_consul_read_and_write():
                     #print "Stdout:{0}".format(stdout)
                     #print "Stderr:{0}".format(stderr)
                     #print "errorCode:{0}".format(errorCode)
-                    assert stdout == "true"
+                    assert errorCode == 200
 
                     curlread = "curl -ks https://consul.bitesize.${ENVIRONMENT}.${DOMAIN}/v1/kv/test/KEY1?token=${CONSUL_MASTER_TOKEN} | jq '.[0].Value' | sed -e s/\"//g | base64 -d"
                     cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlread)
