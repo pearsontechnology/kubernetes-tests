@@ -11,7 +11,7 @@ spec:
         secretName: test-runner-secrets
   containers:
     - name: test-executor-app
-      image: pearsontechnology/test-executor-app:1.0.4
+      image: pearsontechnology/test-executor-app:1.0.5
       imagePullPolicy: Always
       volumeMounts:
       - mountPath: /etc/secret-volume
