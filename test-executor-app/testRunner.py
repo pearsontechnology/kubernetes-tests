@@ -21,7 +21,6 @@ GIT_USERNAME = os.environ['GIT_USERNAME']
 GIT_PASSWORD = os.environ['GIT_PASSWORD']
 GIT_REPO = os.environ['GIT_REPO']
 GIT_BRANCH = os.environ['GIT_BRANCH']
-DEBUG = os.environ['DEBUG']
 
 #g = Github(GIT_USERNAME, GIT_PASSWORD)
 
@@ -38,9 +37,9 @@ def clone_repo(name, url, directory):
     run_script(command,True)
 
 def str_to_bool(s):
-    if s == 'TRUE':
+    if s.lower() == "true":
          return True
-    elif s == 'FALSE':
+    else:
          return False
 
 def print_test_msg(testType):
@@ -141,10 +140,6 @@ clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-
 executeInspecTests(testType, testFiles)
 executeBatsTests(testType, testFiles)
 executePythonTests(testType, testFiles)
-
-if DEBUG != "FALSE": #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
-    while True:
-        time.sleep(5)
 
 if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
     while True:
