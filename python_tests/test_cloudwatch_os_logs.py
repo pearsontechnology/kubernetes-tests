@@ -15,5 +15,3 @@ def test_cloudwatch_os_log_groups_exist():
             if log['logGroupName'].endswith("/syslog"):
                 log_group_count += 1
     assert log_group_count == 4   #should be a total of 4 Cloudwatch audit and syslog log groups
-
-test_cloudwatch_os_log_groups_exist()
