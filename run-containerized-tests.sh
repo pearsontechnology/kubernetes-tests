@@ -19,21 +19,13 @@ print_pod_logs(){
   echo "********************************************************************************************"
   echo
 
-  if [[ $successfulPodCount -eq 1 ]]; then  #If there is one pod, get logs for it
-    echo
-    echo "------------------------------------------------------------------------"
-    echo "---------- Test Output From Pod:  ${lastPod} ---------------"
-    echo "------------------------------------------------------------------------"
-    echo
-    kubectl --namespace=test-runner logs $(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses |grep testexecutor | sort -r | head -n 1 | awk '{print $2}')
-  else
-    echo
-    echo "------------------------------------------------------------------------"
-    echo "----------    Test Output From Pod :  ${nextToLastPod} -----------------"
-    echo "------------------------------------------------------------------------"
-    echo
-    kubectl --namespace=test-runner logs $(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses |grep testexecutor | sort -r | head -n 2 | tail -n 1 | awk '{print $2}')
-  fi
+  pod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | grep -i testexecutor | sort -r | head -n 2 | tail -n 1 | awk '{print $2}')
+  echo
+  echo "------------------------------------------------------------------------"
+  echo "---------- Test Output From Pod:  ${pod} ---------------"
+  echo "------------------------------------------------------------------------"
+  echo
+  kubectl logs $pod --namespace=test-runner
 
 }
 
@@ -59,6 +51,7 @@ run_test(){
   sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%ANSIBLE_BRANCH%%/$ANSIBLE_BRANCH/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%DOMAIN%%/$DOMAIN/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%CONSUL_MASTER_TOKEN%%/$CONSUL_MASTER_TOKEN/" job-temp.yaml > /dev/null 2>&1
   #Need to delete jobs
   if  [[ $(kubectl get jobs testexecutor --namespace=test-runner) ]]
   then  #Job already exists. Clean-up first

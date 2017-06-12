@@ -38,7 +38,7 @@ load helpers
   kubectl create ns test-namespace-prd
   kubectl create ns test-namespace-qa
 
-  kubectl create -f $assets_folder/jenkins-dep.yaml
+  kubectl create -f $assets_folder/jenkins-dep.yaml --namespace=test-namespace-dev
 
   #Wait for jenkins pod creation (2 min max wait for command to come back with zero exit code)
   wait-for-code "run kubectl get pods --namespace=test-namespace-dev $pod | grep -i jenkins | awk '{print $3}' | grep -i Running" 0
@@ -49,7 +49,7 @@ load helpers
   kubectl exec $pod --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-qa
   kubectl exec $pod  --namespace=test-namespace-dev -- kubectl get pods --namespace=test-namespace-prd
 
-  kubectl delete -f $assets_folder/jenkins-dep.yaml
+  kubectl delete -f $assets_folder/jenkins-dep.yaml --namespace=test-namespace-dev
   kubectl delete ns test-namespace-dev
   kubectl delete ns test-namespace-prd
   kubectl delete ns test-namespace-qa

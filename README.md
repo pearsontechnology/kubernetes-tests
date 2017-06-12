@@ -28,7 +28,7 @@ docker build -t pearsontechnology/test-executor-app:${VERSION} .
 3)  Push the new Docker image to DockerHub
 ```
 docker login  #Provide DockerHub Credentials
-docker push pearsontechnology/test-executor-app:1.0.0
+docker push pearsontechnology/test-executor-app:1.0.2
 ```
 4)  Update Yaml Files that utilize the new Docker image version in your branch. Below are the files as they are in the dev branch:
 

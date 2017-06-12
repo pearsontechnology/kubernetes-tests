@@ -5,9 +5,11 @@ import requests
 import json
 import time
 import os
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 def test_stackstorm():
@@ -26,7 +28,7 @@ def test_stackstorm():
                 errorCode,stderr=create_project(ip)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-                cleanup(ip) 
+                cleanup(ip)
 
 
 def checkfill(st2host):

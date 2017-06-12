@@ -77,6 +77,17 @@ def test_no_ansible_playbook_failures_on_minion_nodes():
                 stdout,stderr,errorCode=run_script(cmd)
                 assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
+def test_no_ansible_playbook_failures_on_consulvault_nodes():
+    hostYaml="/opt/testexecutor/hosts.yaml"
+    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
+        contents = yaml.load(ymlfile1)
+        for host in contents['hosts']:
+            if ("consulvault" in host['name']):
+                # Verify the Ansible Playbook Finished and there is no failures.  Look for the ansible RECAP and find any instances of failed=x where x is greater than zero
+                cmd="ssh -i ~/.ssh/bitesize.key root@{0} 'cat /var/log/cloud-init-output.log | grep -A 2 RECAP | grep -o 'failed=[1-9][0-9]*''".format(host['value'])
+                stdout,stderr,errorCode=run_script(cmd)
+                assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
 #def test_nfs_nodes_clone_correct_ansible_branch():
 #    ec2 = boto3.client('ec2', region_name=os.environ["REGION"])
 #    ansible_branch=os.environ["ANSIBLE_BRANCH"]
