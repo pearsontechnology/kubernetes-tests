@@ -20,24 +20,24 @@ def test_cloudwatch_os_log_groups_exist():
 def test_cloudwatch_audit_log_streams():
     logs = boto3.client('logs', region_name=os.environ["REGION"])
     env = os.environ["ENVIRONMENT"]
-    log_stream_count = 0
+    log_stream_audit_count = 0
     log_groups = logs.describe_log_groups()
     for log in log_groups ['logGroups']:
         if (env in log['logGroupName']) and log['logGroupName'].startswith("/bitesize") and log['logGroupName'].endswith("/audit"):
             log_streams = logs.describe_log_streams()
             for log_stream in log_streams ['logStreams']:
-                log_stream_count += 1
-    assert log_stream_count >= 3   #should be at least 6 Cloudwatch audit log streams
+                log_stream_audit_count += 1
+    assert log_stream_audit_count >= 3   #should be at least 6 Cloudwatch audit log streams
 
 ##Verify audit log streams written to Cloudwatch log groups
 def test_cloudwatch_syslog_log_streams():
     logs = boto3.client('logs', region_name=os.environ["REGION"])
     env = os.environ["ENVIRONMENT"]
-    log_stream_count = 0
+    log_stream_syslog_count = 0
     log_groups = logs.describe_log_groups()
     for log in log_groups ['logGroups']:
         if (env in log['logGroupName']) and log['logGroupName'].startswith("/bitesize") and log['logGroupName'].endswith("/syslog"):
             log_streams = logs.describe_log_streams()
             for log_stream in log_streams ['logStreams']:
-                log_stream_count += 1
-    assert log_stream_count >= 3   #should be at least 6 Cloudwatch syslog log streams
+                log_stream_syslog_count += 1
+    assert log_stream_syslog_count >= 3   #should be at least 6 Cloudwatch syslog log streams
