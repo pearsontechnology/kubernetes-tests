@@ -81,45 +81,21 @@ describe service('tuned') do
   it { should be_enabled }
   it { should be_running }
 end
-describe service('dnsmasq') do
-  it { should be_enabled }
-  it { should be_running }
-end
 describe file('/etc/ssl/docker-registry.pem') do
   it {should exist}
-  its('size') { should be > 0 }
 end
 describe file('/etc/ssl/docker-registry-key.pem') do
   it {should exist}
-  its('size') { should be > 0 }
-  it { should be_owned_by 'root' }
-  its('mode') { should cmp '00600' }
 end
 describe file('/etc/pki/ca-trust/source/anchors/ca.pem') do
   it {should exist}
-  its('size') { should be > 0 }
 end
 
 describe file('/etc/resolv.conf') do
   its('content') { should match(%r{nameserver 172.31.16.2}) }
 end
-describe file('/etc/resolv.conf.pods') do
-  it {should exist}
-end
-describe file('/etc/resolv.conf.kubedns') do
-    it {should exist}
-end
 describe file('/etc/hosts') do
-  its('content') { should match(%r{^127.0.0.1\s.*?localhost.*$}) }
-end
-describe file('/etc/dnsmasq.conf') do
-  its('content') { should match(%r{^server=\/cluster.local\/172.31.16.2$}) }
-end
-describe file('/etc/dnsmasq_hosts') do
-  it {should exist}
-end
-describe port(53) do
-  it { should be_listening }
+  its('content') { should match(%r{172.31.16.3 bitesize-registry.default.svc.cluster.local}) }
 end
 describe mount('/') do
   it { should be_mounted }
