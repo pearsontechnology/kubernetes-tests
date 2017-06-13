@@ -102,3 +102,7 @@ end
 describe file('/etc/kubernetes/auth/basic_auth.csv') do
   it {should exist}
 end
+describe file('/etc/kubernetes/auth/basic_auth.csv') do
+  its('mode') { should cmp '0644' }
+  its('owner') { should eq 'root' }
+end
