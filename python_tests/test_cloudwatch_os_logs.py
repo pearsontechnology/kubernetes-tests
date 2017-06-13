@@ -49,4 +49,4 @@ def test_cloudwatch_syslog_log_streams():
             for log_stream in log_stream_data['logStreams']:
                 if (log_stream['logStreamName'].startswith("10.") or log_stream['logStreamName'].startswith("172.")):
                     syslog_log_stream_count +=1
-    assert syslog_log_stream_count >= 6   #   #should be at least 6 Cloudwatch syslog log streams   #should be at least 6 Cloudwatch syslog log streams
+    assert syslog_log_stream_count >= 6   #   #should be at least 6 Cloudwatch syslog log streams
