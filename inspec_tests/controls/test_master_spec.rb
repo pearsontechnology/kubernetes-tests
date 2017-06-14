@@ -100,6 +100,5 @@ describe mount('/mnt/docker') do
   its('type') { should eq 'btrfs'}
 end
 describe file('/etc/kubernetes/auth/basic_auth.csv') do
-  it { should be_mode 0600 }
-  it { should be_owned_by 'root' }
+  it {should exist}
 end
