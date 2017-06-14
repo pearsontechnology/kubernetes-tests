@@ -19,7 +19,7 @@ print_pod_logs(){
   echo "********************************************************************************************"
   echo
 
-  pod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | grep -i testexecutor | sort -r | head -n 2 | tail -n 1 | awk '{print $2}')
+  pod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | grep -i testexecutor | sort | tail -n 1 | awk '{print $2}')
   echo
   echo "------------------------------------------------------------------------"
   echo "---------- Test Output From Pod:  ${pod} ---------------"
