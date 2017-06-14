@@ -26,14 +26,6 @@ load helpers
   kubectl get svc kube-ui --namespace=kube-system --no-headers
 }
 
-@test "consul service" {
-  kubectl get svc consul --namespace=kube-system --no-headers
-}
-
-@test "vault service" {
-  kubectl get svc vault --namespace=kube-system --no-headers
-}
-
 # @test "elasticsearch service" {
 #   kubectl get svc elasticsearch --namespace=default --no-headers
 # }

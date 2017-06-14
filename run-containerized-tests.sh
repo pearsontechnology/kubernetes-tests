@@ -19,24 +19,13 @@ print_pod_logs(){
   echo "********************************************************************************************"
   echo
 
-  if [[ $successfulPodCount -eq 1 ]]; then  #If there is one pod, get logs for it
-    lastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep -v '\[\]' | sort -r | head -n 2 | grep testexecutor | awk '{print $5}')
-    echo
-    echo "------------------------------------------------------------------------"
-    echo "---------- Test Output From Pod:  ${lastPod} ---------------"
-    echo "------------------------------------------------------------------------"
-    echo
-    kubectl logs $lastPod --namespace=test-runner
-
-  else
-    nextToLastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep -v '\[\]' | sort -r | head -n 3 | tail -n 1 | grep testexecutor | awk '{print $5}')
-    echo
-    echo "------------------------------------------------------------------------"
-    echo "----------    Test Output From Pod :  ${nextToLastPod} -----------------"
-    echo "------------------------------------------------------------------------"
-    echo
-    kubectl logs $nextToLastPod --namespace=test-runner
-  fi
+  pod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | grep -i testexecutor | sort -r | head -n 2 | tail -n 1 | awk '{print $2}')
+  echo
+  echo "------------------------------------------------------------------------"
+  echo "---------- Test Output From Pod:  ${pod} ---------------"
+  echo "------------------------------------------------------------------------"
+  echo
+  kubectl logs $pod --namespace=test-runner
 
 }
 
@@ -58,8 +47,11 @@ run_test(){
   sed -i '' -e "s/%%GIT_BRANCH%%/$GIT_BRANCH/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%DEBUG%%/$DEBUG/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%KUBE_PASS%%/$KUBE_PASS/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%KUBERNETES_VERSION%%/$KUBERNETES_VERSION/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%MINION_COUNT%%/$MINION_COUNT/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%ANSIBLE_BRANCH%%/$ANSIBLE_BRANCH/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%DOMAIN%%/$DOMAIN/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%CONSUL_MASTER_TOKEN%%/$CONSUL_MASTER_TOKEN/" job-temp.yaml > /dev/null 2>&1
   #Need to delete jobs
   if  [[ $(kubectl get jobs testexecutor --namespace=test-runner) ]]
   then  #Job already exists. Clean-up first
