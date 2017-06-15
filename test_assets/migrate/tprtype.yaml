@@ -1,0 +1,9 @@
+apiVersion: extensions/v1beta1
+kind: ThirdPartyResource
+description: "kubetest ThirdPartyResource"
+metadata:
+  name: tprtest.prsn.io
+  labels:
+    type: ThirdPartyResource
+versions:
+  - name: v1

@@ -12,3 +12,5 @@ auth:
   - test_auth_spec.rb
 minion:
   - test_minion_spec.rb
+consulvault:
+  - test_consulvault_spec.rb
