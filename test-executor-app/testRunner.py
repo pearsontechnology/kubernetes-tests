@@ -72,22 +72,22 @@ def executeTest(hostname, ip, testFiles=None):
                         run_script(cmd, False)
                         if (testFiles is None):  # Execute all tests
                             if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm"):
-                                cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
+                                cmd = "inspec exec {0}{1} -t --sudo \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             elif (resourceName == "master"):
                                 cmd = "inspec exec {0}{1} -t --sudo \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
-                                cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
+                                cmd = "inspec exec {0}{1} -t --sudo \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             print("Testing on HostName=%s with IP=%s" % (hostname, ip))
                             print("    Command = %s " % (cmd))
                             run_script(cmd, True)
                         # Execute only tests that match those files passed in
                         elif ((testFiles is not None) and (test in testFiles)):
                             if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm"):
-                                cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
+                                cmd = "inspec exec {0}{1} -t --sudo \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             elif (resourceName == "master"):
                                 cmd = "inspec exec {0}{1} -t --sudo \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
-                                cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
+                                cmd = "inspec exec {0}{1} -t --sudo \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             print("Testing on HostName=%s with IP=%s" % (hostname, ip))
                             print("    Command = %s " % (cmd))
                             run_script(cmd, True)
