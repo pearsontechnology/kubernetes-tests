@@ -19,13 +19,24 @@ print_pod_logs(){
   echo "********************************************************************************************"
   echo
 
-  pod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses | grep -i testexecutor | sort | tail -n 1 | awk '{print $2}')
-  echo
-  echo "------------------------------------------------------------------------"
-  echo "---------- Test Output From Pod:  ${pod} ---------------"
-  echo "------------------------------------------------------------------------"
-  echo
-  kubectl logs $pod --namespace=test-runner
+  if [[ $allPodCount -eq 1 ]]; then  #If there is one pod, get logs for it
+    lastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep testexecutor | sort | tail -n 1 | awk '{print $2}')
+    echo
+    echo "------------------------------------------------------------------------"
+    echo "---------- Test Output From Pod:  ${lastPod} ---------------"
+    echo "------------------------------------------------------------------------"
+    echo
+    kubectl logs $lastPod --namespace=test-runner
+
+  else  #Get logs for next to last pod that ran. Don't get the last one as it might have been terminated by the kubernetes-tests job due to timeout
+    nextToLastPod=$(kubectl get pods --namespace=test-runner --show-all -o=custom-columns=STATUS:.status.startTime,NAME:.metadata.name,CONTAINER_STATUS:.status.containerStatuses  | grep testexecutor | sort -r | head -n 3 | tail -n 1 | awk '{print $2}')
+    echo
+    echo "------------------------------------------------------------------------"
+    echo "----------    Test Output From Pod :  ${nextToLastPod} -----------------"
+    echo "------------------------------------------------------------------------"
+    echo
+    kubectl logs $nextToLastPod --namespace=test-runner
+  fi
 
 }
 
