@@ -7,7 +7,7 @@ import yaml
 import argparse
 import os
 import time
-from github import Github
+#from github import Github
 import urlparse
 import urllib
 
@@ -24,7 +24,7 @@ GIT_PASSWORD = os.environ['GIT_PASSWORD']
 GIT_REPO = os.environ['GIT_REPO']
 GIT_BRANCH = os.environ['GIT_BRANCH']
 
-g = Github(GIT_USERNAME, GIT_PASSWORD)
+#g = Github(GIT_USERNAME, GIT_PASSWORD)
 
 def clone_repo(name, url, directory):
     parts = urlparse.urlparse(url)
@@ -40,6 +40,7 @@ def clone_repo(name, url, directory):
 
 def str_to_bool(s):
     s.lower() == "true"
+
 
 def print_test_msg(testType):
     print ("**********************************************************")
@@ -58,7 +59,8 @@ def run_script(command, output):
         print "{0}".format(stdout)
         print "{0}".format(stderr)
 
-def run_tests_for_kind(kind):
+def run_target_tests(target):
+    # TODO
 
 
 
@@ -89,6 +91,7 @@ def shouldRunTest(test, testFiles):
     if (testfiles is not None) and (test in testFiles):
         return true
     return false
+
 
 def executeInspecTests(testType, testFiles):
     hosts = hostsFromFile(hostYaml)
@@ -133,7 +136,7 @@ def executeBatsTests(testType, testFiles):
         print_test_msg("Bats")
         for test in testFiles:
             t = batsDir + test
-            run_script("bats %s" % (t), True)
+            run_script("bats -t %s" % (batsDir), True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("config", help="config - Key/Value Yaml File containing hostnames ad :ips' to test")
@@ -144,6 +147,7 @@ args = parser.parse_args()
 hostYaml = args.config
 testType = args.type
 testFiles = args.files
+DEBUG = str_to_bool(os.environ['DEBUG'])
 
 
 #print("Host Yaml= %s" % (hostYaml))
@@ -152,13 +156,17 @@ testFiles = args.files
 
 clone_repo("kubernetes-tests", "https://github.com/pearsontechnology/kubernetes-tests.git", "/tmp/kubernetes-tests")
 
-if args.kind is not None:
+if args.target is not None:
     #TODO
-    run_tests_for_kind(args.kind)
+    run_target_tests(args.target)
 else:
     executeInspecTests(testType, testFiles)
     executePythonTests(testType, testFiles)
-executeBatsTests(testType, testFiles)
+    executeBatsTests(testType, testFiles)
+
+if(DEBUG): #If there was a debug flag, don't kill the pod. Let it run until the timeout is reached
+    while True:
+        time.sleep(5)
 
 if(failuresReceived):
     print ("**********************************************************")

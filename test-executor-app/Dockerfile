@@ -1,7 +1,32 @@
-FROM bitesize-registry.default.svc.cluster.local:5000/baseimages/ubuntu-httpdfcgi:1.3
+FROM phusion/passenger-full:0.9.19
+
 MAINTAINER Bitesize Project <bitesize-techops@pearson.com>
-RUN echo 'deb http://apt/ bitesize main' > /etc/apt/sources.list.d/bitesize.list
-RUN apt-get -q update && apt-get install -y --force-yes ruby2.0 ruby-dev gcc make git-all jq  certs=1.0-*  testrunner=1.0-* jmespath docutils python-dateutil futures s3transfer botocore boto3 nose2 pyyaml rubygem-json rubygem-mixlib-shellout rubygem-net-ssh rubygem-net-scp rubygem-ffi rubygem-gssapi rubygem-httpclient rubygem-rubyntlm rubygem-little-plugger rubygem-multi-json rubygem-logging rubygem-nori rubygem-builder rubygem-gyoku rubygem-erubis rubygem-winrm rubygem-rubyzip rubygem-winrm-fs rubygem-excon rubygem-docker-api rubygem-train rubygem-thor rubygem-rainbow rubygem-method-source rubygem-rspec-support rubygem-rspec-core rubygem-diff-lcs rubygem-rspec-expectations rubygem-rspec-mocks rubygem-rspec rubygem-rspec-its rubygem-coderay rubygem-slop rubygem-pry rubygem-hashie rubygem-mixlib-log rubygem-sslshake rubygem-inspec bats  && rm -rf /var/cache/apt
 
+WORKDIR /opt/testexecutor
+ENV PATH "$PATH:/opt/testexecutor"
+ENV PATH "$PATH:/opt/testexecutor/bin"
+ENV PATH "$PATH:/usr/local/rvm/gems/ruby-2.3.1/bin"
 
-ENTRYPOINT ["/var/run.sh"]
+RUN curl -L -k -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py
+RUN python get-pip.py
+
+RUN apt-get update --fix-missing && apt-get install -y python-dev jq git-all
+
+#Install Python Dependencies
+RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures requests
+RUN pip install PyGithub==1.28 requests
+
+#Install INSPEC
+RUN gem install inspec
+
+#Install Bats
+RUN git clone https://github.com/sstephenson/bats.git && bats/install.sh .
+
+#Install Kubernetes kubectl
+RUN curl -L -k -s -o "/opt/testexecutor/kubectl" https://storage.googleapis.com/kubernetes-release/release/v1.5.7/bin/linux/amd64/kubectl
+
+COPY testRunner.py /opt/testexecutor
+COPY run.sh /opt/testexecutor
+RUN chmod -R 775 /opt/testexecutor/*
+
+ENTRYPOINT ["/opt/testexecutor/run.sh"]

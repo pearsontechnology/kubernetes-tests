@@ -6,14 +6,6 @@ load helpers
 
 # Ingress
 
-@test "consul ingress" {
-  kubectl get ing consul --namespace=kube-system --no-headers
-}
-
-@test "vault ingress" {
-  kubectl get ing vault --namespace=kube-system --no-headers
-}
-
 @test "grafana ingress" {
   kubectl get ing grafana --namespace=default --no-headers
 }
@@ -23,19 +15,19 @@ load helpers
   run kubectl get ing --namespace=kube-system ingress-host-test --no-headers
   if [ "$status" -eq 0 ]; then
     if [ "$output" != "" ]; then
-      kubectl delete -f $assets_folder/ingress.hashost.yaml
+      kubectl delete -f $assets_folder/ingress.hashost.yaml --namespace=kube-system
     fi
   fi
-  kubectl create -f $assets_folder/ingress.hashost.yaml
+  kubectl create -f $assets_folder/ingress.hashost.yaml --namespace=kube-system
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
   run filtered_ingress_logs_eq_0 $pods "ingress-host-test"
-  kubectl delete -f $assets_folder/ingress.hashost.yaml
-  kubectl create -f $assets_folder/ingress.nohost.yaml
+  kubectl delete -f $assets_folder/ingress.hashost.yaml --namespace=kube-system
+  kubectl create -f $assets_folder/ingress.nohost.yaml --namespace=kube-system
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
   run filtered_ingress_logs_gt_0 $pods "ingress-host-test"
-  kubectl delete -f $assets_folder/ingress.nohost.yaml
+  kubectl delete -f $assets_folder/ingress.nohost.yaml --namespace=kube-system
 }
 
 #@test "es ingress" {

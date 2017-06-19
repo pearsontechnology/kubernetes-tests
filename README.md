@@ -1,49 +1,58 @@
-# kubernetes-tests
+## Kubernetes Testing
 
-Kubernetes (k8s) containerized/deployable test suite.  This repo allows the execution of BATS, INSPEC, and Python tests against a deployed PaaS.  Through the usage of kubernetes jobs a test contianer spins up execute a specified number of tests against the nodes within the kubernetes PaaS.  
+This repository is the containerized/deployable test suite that may be utilized to validate a kubernetes deployment.  This repo allows the execution of BATS, INSPEC, and Python tests against a deployed PaaS.  Through the usage of kubernetes jobs/pods a test container spins up execute a specified number of tests against the nodes within the kubernetes PaaS.  
 
 ==========================================================================================
-**Getting Started**
 
-1) Get access to a test container docker image, which is vital to being able to run the containerized test suite. The latest version is hosted on pearson's docker hub registry (docker pull pearsontechnology/test-executor-app).  The test container (test-executor-app) is built from this repo, using a custom Pearson jenkins plugin that is not yet open sourced. So, pull from docker hub and add it as the image location in [job.yaml](./job.yaml) and [job-withargs.yaml](./job-withargs.yaml) instead of the bitesize-registry location that is currently baselined in those files.
+**Building a new version of the [test container docker image](https://hub.docker.com/r/pearsontechnology/test-executor-app)**
 
-2) Familiarize yourself with some of the files that are used to start the kubernetes jobs:
+1) Clone the kubernetes-tests repository and create your own branch
 
-- [run-tests-example.sh](./run-tests-example.sh) - Sets up environment on kubernetes master node and calls the run-containerized-tests.sh script. This script should be placed on your kubernetes master node.
-- [run-containerized-tests.sh](./run-containerized-tests.sh) - This file configures the kubernetes job via avaialble options,  runs the job, monitors progress, and then reports results from completed or error pod logs that were part of the job.
+```
+git clone -q -b dev git@github.com:pearsontechnology/kubernetes-tests.git
+git checkout -b [name_of_your_new_branch]
+git push -u origin [name_of_your_new_branch]
+```
+
+2) Build a new Docker
+
+```
+cd kuberenets-tests/test-executor-app
+export VERSION=<MAJOR>.<MINOR>.<PATCH>
+```
+
+ -  Note: Review current [Image Versions](https://hub.docker.com/r/pearsontechnology/test-executor-app/tags/) when picking your new version.
+```
+docker build -t pearsontechnology/test-executor-app:${VERSION} .
+```
+3)  Push the new Docker image to DockerHub
+```
+docker login  #Provide DockerHub Credentials
+docker push pearsontechnology/test-executor-app:1.0.2
+```
+4)  Update Yaml Files that utilize the new Docker image version in your branch. Below are the files as they are in the dev branch:
+
+ - [job.yaml](https://github.com/pearsontechnology/kubernetes-tests/blob/master/job.yaml)
+ - [job-withargs.yaml](https://github.com/pearsontechnology/kubernetes-tests/blob/master/job-withargs.yaml)
+ - [pod.yaml](https://github.com/pearsontechnology/kubernetes-tests/blob/master/pod.yaml)
+
+
+**Overview of scripts within kubernetes-tests**
+
+Familiarize yourself with some of the files that are used to start the kubernetes jobs:
+
+- [execute-test-pod.sh](./execute-test-pod.sh) - This file runs the test-executor-app docker image in a kubernetes pod and follows the pod logs after it starts so you may monitor test execution. This should be used by the Bitesize team to run/develop tests for a deployment.
+- [run-containerized-tests.sh](./run-containerized-tests.sh) - This file configures the kubernetes job via available options,  runs the job, monitors progress, and then reports results from completed or error pod logs that were part of the job.  Travis CI utilizes this script by call it from the [run-tests.sh](https://github.com/pearsontechnology/bitesize/blob/dev/test/kubernetes/run-tests.sh) script that gets put on the Master instance in the PaaS
 - [run.sh](./test-executor-app/run.sh) - This is the test container Docker entry point. It builds up a hosts.yaml file for a list of hosts that will be under tests in the cluster, configures kubectl, and then starts the tests by launching testRunner.py
 - [testRunner.py](./test-executor-app/testRunnery.py) - This file is built into the test container image and is responsible for execution of the INSPEC/BATS/Python tests in the kubernetes-tests repo.
 
-3) Review what is required in your Kubernetes PaaS environment to run tests. This is detailed in the section titled [**What's Required By the Test Container to Run?**](#RunTests)
-
-==========================================================================================
-
-The Pearson team utilizes kubernetes-tests to execute tests against the PaaS. On our deployment, we use a startup script (run-tests.sh) to kick off the containerized tests from our CI/CD pipeline (TravisCI). You may review the [run-tests-example.sh](./run-tests-example.sh) included in this repo, which is an example of our run-tests.sh script that may be used on the master node of your kubernetes cluster to kick off tests for each deployed PaaS. This is how we utilize it:
-
-**Run All Tests From a Specific kubernetes-tests Branch Against a PaaS Deployment:**
-
-```
-1) ssh centos@master
-2) sudo su -;
-3) export TEST_BRANCH=${kubernetes-tests Branch}
-3) cd /tmp/test/kubernetes
-4) ./run-tests.sh ${TEST_BRANCH}  
-```
-
-**View Test Results for a Bitesize PaaS Deployment:**
-
-```
-1) ssh centos@master
-2) sudo su -;
-3) cat /root/kubernetes-containerized-tests.log
-```
 
 ==========================================================================================
 <a id="Environment"></a>
 
-**What's Required By the Test Container to Run?**
+**What's Required By the Test Container to Run in Kubernetes?**
 
-First off, the test container requires secrets to be set to enable ssh'ing into other nodes in the cluster as well as to interact with Git. Below is an overview of these secrets and how to set them:
+The test container requires secrets to be set to enable ssh'ing into other nodes in the cluster as well as to interact with Git. Below is an overview of these secrets which need to exist in the test-runner namespace priot to executing the test container.
 
 - **bitesize.key** :  This is the key used to ssh from yor master kubernetes node to other nodes in the private subnet
 - **kubectl-client-key** : This is the client key used by kubectl which will be used in the container to setup kubectl config
@@ -63,27 +72,35 @@ kubectl get secrets test-runner-secrets --namespace=test-runner > /dev/null 2>&1
   --from-literal=git-password=git-token \
   --namespace=test-runner
 ```
+==========================================================================================
 
-Once secrets are set, you also need some environment variables. The varibales are passed along to the test container through the kubernetes job via the [job.yaml](./job.yaml) or [job-withargs.yaml](./job-withargs.yaml) files.  Below is an overview of these environment variables, which are utilized by the test container at its docker point of entry to retrieve instances to test as well as to setup kubectl within the test container. Usage may be reviewed in [run.sh](./test-executor-app/run.sh) and [testRunney.py](./test-executor-app/testRunnery.py). These environment variables are set on our kubernetes master node as the root user.
+**Test Execution Options/Examples for Running tests by a single Pod:**
+
+Example1: Execute all tests against your deployment in a pod for dev branch of kubernetes-tests
 
 ```
-export REGION=us-west-2 #Deployed region for the PaaS
-export STACK_ID=a       #Which stack a/b is under test
-export ENVIRONMENT=ben  #environment name
-export TEST_BRANCH=dev  #kubernetes-tests branch you are testing with
-export MINION_COUNT=2   #From bitsize deployment terraform.tfvars
-export KUBE_PASS=${pass}#From bitesize deployment terraform.tfvars
+     ./execute-test-pod.sh -d FALSE -b dev
+```
+
+**Available Options: execute-test-pod.sh**
+
+Execute  ./execute-test-pod.sh  without any arguments to get command help and more information on options.
+
+```
+Overall Usage: ./execute-test-pod.sh -d <TRUE/FALSE> -b <kuberenets-test branch>
 ```
 ==========================================================================================
 
-**Test Execution Options/Examples:**
+**Test Execution Options/Examples for Running a Job:**
+
+Note: These are rarely used, but could be added to the [run-tests.sh](https://github.com/pearsontechnology/bitesize/blob/dev/test/kubernetes/run-tests.sh) script that gets executed by our master user-data.
 
 Example1: Execute all tests (python/inspec/bats within kubernetes-tests) against your deployment
 
 ```
      ./run-containerized-tests.sh -t all
 ```
-Example1: Execute all tests (python/inspec/bats within kubernetes-tests) aginst your deployment from a specific kubernetes-tests branch
+Example1: Execute all tests (python/inspec/bats within kubernetes-tests) against your deployment from a specific kubernetes-tests branch
 
 ```
      ./run-containerized-tests.sh -t all -b mybranch
@@ -119,25 +136,6 @@ Execute  ./run-containerized-tests.sh  without any arguments to get command help
 ```
 Overall Usage: ./run-containerized-tests.sh -t <all|python|bats|inspec> -p <# pods> -c <# completions> -b <branch> -e <timeout> -f <file1> -f <file2> -f <filen>
 ```
-==========================================================================================
-
- **Making Source Code updates to the test-executor-app  (<kubernetes-tests>/test-executor-app) will require a new docker image version to be built**
-
-Deployment of jenkins to build the testcontainer image requires the open sourcing (TBD) of our Jenkins Plugin: [Pearson Jenkins Plugin](https://github.com/pearsontechnology/deployment-pipeline-jenkins-plugin)
-
- 1.  First deploy your Jenkins Instance on Master
-   ```
-      kubectl create namespace test-runner
-      kubectl create -f jenkins-dep.yaml
-      kubectl create -f jenkins-svc.yaml
-      kubectl create -f jenkins-ing.yaml
-   ```
-
- 2. Add your frontend ELB Public IP as jenkins.test-runner.prsn-dev.io to your hosts file
- 3. Navigate to jenkins.test-runner.prsn-dev.io with the credentials specified in jenkins-dep.yaml for login
- 4. Commit your code changes to the kubernetes-tests repo which will start new jobs in your jenkins deployment.
- 5. Once all jobs complete (environments is expected to fail as we are not deploying), update **job.yaml** and **job-withargs.yaml**    to include the new test container image version for the test-executor-app docker image version produced and found in the  test-executor-app-docker-image job in your jenkins deployment
-
 ==========================================================================================
 
 **kubernetes-tests/inspec_tests/config.yaml**

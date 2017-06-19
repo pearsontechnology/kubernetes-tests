@@ -25,7 +25,7 @@ def query_dns(domain,ip):
     return stderr
 
 def test_external_dns_query_performance():
-        hostYaml="/var/hosts.yaml"
+        hostYaml="/opt/testexecutor/hosts.yaml"
         with open(hostYaml, 'r') as ymlfile1:  # hosts to test
             contents = yaml.load(ymlfile1)
             for host in contents['hosts']:
@@ -47,7 +47,7 @@ def test_external_dns_query_performance():
                     assert avgLookupTime < 0.200
 
 def test_no_error_on_dns_lookup():
-    hostYaml="/var/hosts.yaml"
+    hostYaml="/opt/testexecutor/hosts.yaml"
     with open(hostYaml, 'r') as ymlfile1:  # hosts to test
         contents = yaml.load(ymlfile1)
         for host in contents['hosts']:
