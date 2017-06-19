@@ -103,6 +103,7 @@ display_usage() {
   echo -e "                      bats: Execute 1-n bats tests from kubernetes-tests/bats_tests. The -f option is required when using the bats argument"
   echo -e "                      inspec: Execute 1-n inspec tests from kubernetes-tests/inspec_tests that are part of the"
   echo -e "                              kubernetes-testss/inspec_tests/config.yaml. The -f option is required when using the inspec argument"
+  echo -e "   -k              Specify test kind. E.g. stackstorm, minion, master."
   echo -e "   -p              Specify parrallelism of test job.  How many pods to achieve success. Defaults to 1 if not specified"
   echo -e "   -c              Specify completions of test job.  How many successful completions of the tests are required to achieve success. Defaults to 1"
   echo -e "   -b              Specify the kubernetes-tests  branch to execute tests from.  Defaults to the dev branch"
