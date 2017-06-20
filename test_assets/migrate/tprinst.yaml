@@ -1,0 +1,8 @@
+metadata:
+    name: tprtest
+    namespace: kubetests-prd
+    labels:
+        type: tprtest.prsn.io
+apiVersion: prsn.io/v1
+kind: Tprtest
+description: ""

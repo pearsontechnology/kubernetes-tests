@@ -4,7 +4,6 @@ set -o pipefail
 
 load helpers
 
-
 @test "grafana thirdpartyresource" {
   kubectl get thirdpartyresources ${ENVIRONMENT}-grafana.prsn.io --namespace=default --no-headers
 }

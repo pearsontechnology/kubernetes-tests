@@ -1,9 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: testexecutor
   namespace: test-runner
 spec:
+  manualSelector: true
   selector:
     matchLabels:
       app: testexecutor
@@ -22,7 +23,7 @@ spec:
           secretName: test-runner-secrets
       containers:
       - name: testexecutor
-        image: bitesize-registry.default.svc.cluster.local:5000/test-runner/test-executor-app:1.0.0-20161212214120
+        image: pearsontechnology/test-executor-app:1.0.5
         volumeMounts:
         - mountPath: /etc/secret-volume
           name: secret-volume
@@ -52,10 +53,16 @@ spec:
           value: "%%GIT_BRANCH%%"
         - name: KUBE_PASS
           value: "%%KUBE_PASS%%"
+        - name: KUBERNETES_VERSION
+          value: "%%KUBERNETES_VERSION%%"
         - name: MINION_COUNT
           value: "%%MINION_COUNT%%"
         - name: DEBUG
           value: "%%DEBUG%%"
+        - name: CONSUL_MASTER_TOKEN
+          value: "%%CONSUL_MASTER_TOKEN%%"
+        - name: DOMAIN
+          value: "%%DOMAIN%%"
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:

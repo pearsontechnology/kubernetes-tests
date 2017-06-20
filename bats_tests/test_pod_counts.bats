@@ -16,18 +16,6 @@ load helpers
   values_equal $KUBE_DNS_DESIRED $KUBE_DNS_CURRENT
 }
 
-@test "consul pods" {
-  CONSUL_DESIRED=`kubectl get rc consul --namespace=kube-system -o jsonpath='{.spec.replicas}'`
-  CONSUL_CURRENT=`kubectl get rc consul --namespace=kube-system -o jsonpath='{.status.replicas}'`
-  values_equal $CONSUL_DESIRED $CONSUL_CURRENT
-}
-
-@test "vault pods" {
-  VAULT_DESIRED=`kubectl get rc vault --namespace=kube-system -o jsonpath='{.spec.replicas}'`
-  VAULT_CURRENT=`kubectl get rc vault --namespace=kube-system -o jsonpath='{.status.replicas}'`
-  values_equal $VAULT_DESIRED $VAULT_CURRENT
-}
-
 # @test "es-master pods" {
 #   ES_MASTER_DESIRED=`kubectl get deployments es-master --namespace=default -o jsonpath='{.spec.replicas}'`
 #   ES_MASTER_CURRENT=`kubectl get deployments es-master --namespace=default -o jsonpath='{.status.replicas}'`
