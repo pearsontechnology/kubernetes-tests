@@ -31,6 +31,6 @@ def test_cloudwatch_flowlog_log_streams():
         if (env in log_group['logGroupName']) and log_group['logGroupName'].startswith("/bitesize") and log_group['logGroupName'].endswith("/flowlog"):
             log_stream_data = logs.describe_log_streams(logGroupName = log_group['logGroupName'])
             for log_stream in log_stream_data['logStreams']:
-                if (log_stream['logStreamName'].startswith("eni"):
+                if (log_stream['logStreamName'].startswith("eni")):
                     syslog_log_stream_count +=1
     assert syslog_log_stream_count >= 1   #   #should be at least 1 flowlog log stream
