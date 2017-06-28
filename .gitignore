@@ -2,3 +2,4 @@
 *.iml
 pod-temp.yaml
 job-temp.yaml
+*.pyc
