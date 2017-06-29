@@ -48,7 +48,7 @@ def test_consul_read_and_write():
                     #print "errorCode:{0}".format(errorCode)
                     assert errorCode == 0
 
-                    curlaclcheck = "curl -s https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1 | jq '.[0].Value'".format(env,dom)
+                    curlaclcheck = "curl -fks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1".format(env,dom)
                     cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlaclcheck)
                     process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                     stdout, stderr = process.communicate()
