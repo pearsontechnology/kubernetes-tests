@@ -34,9 +34,9 @@ load helpers
 #   values_equal $ES_CLIENT_DESIRED $ES_CLIENT_CURRENT
 # }
 
-@test "monitoring-heapster-v6 pods" {
-  HEAPSTER_DESIRED=`kubectl get rc monitoring-heapster-v6 --namespace=kube-system -o jsonpath='{.spec.replicas}'`
-  HEAPSTER_CURRENT=`kubectl get rc monitoring-heapster-v6 --namespace=kube-system -o jsonpath='{.status.replicas}'`
+@test "heapster-v1.2.0.1 pods" {
+  HEAPSTER_DESIRED=`kubectl get deployments heapster-v1.2.0.1 --namespace=kube-system -o jsonpath='{.spec.replicas}'`
+  HEAPSTER_CURRENT=`kubectl get deployments heapster-v1.2.0.1 --namespace=kube-system -o jsonpath='{.status.replicas}'`
   values_equal $HEAPSTER_DESIRED $HEAPSTER_CURRENT
 }
 

@@ -34,8 +34,8 @@ load helpers
 #   kubectl get svc elasticsearch-discovery --namespace=default --no-headers
 # }
 
-@test "monitoring-heapster service" {
-  kubectl get svc monitoring-heapster --namespace=kube-system --no-headers
+@test "heapster service" {
+  kubectl get svc heapster --namespace=kube-system --no-headers
 }
 
 @test "grafana service" {
