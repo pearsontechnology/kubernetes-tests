@@ -14,3 +14,5 @@ minion:
   - test_minion_spec.rb
 consulvault:
   - test_consulvault_spec.rb
+vrouter:
+  - test_vrouter_spec.rb

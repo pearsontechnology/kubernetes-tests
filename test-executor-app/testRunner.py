@@ -71,7 +71,7 @@ def executeTest(hostname, ip, testFiles=None):
                         cmd = "echo \"Host {0}\n\tStrictHostKeyChecking no\n\" >> ~/.ssh/config".format(ip)
                         run_script(cmd, False)
                         if (testFiles is None):  # Execute all tests
-                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm" or resourceName == "consulvault"):
+                            if (resourceName in ["nfs", "bastion", "stackstorm", "consulvault", "vrouter"]):
                                 cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
                                 cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
@@ -80,7 +80,7 @@ def executeTest(hostname, ip, testFiles=None):
                             run_script(cmd, True)
                         # Execute only tests that match those files passed in
                         elif ((testFiles is not None) and (test in testFiles)):
-                            if (resourceName == "nfs" or resourceName == "bastion" or resourceName == "stackstorm" or resourceName == "consulvault"):
+                            if (resourceName in ["nfs", "bastion", "stackstorm", "consulvault", "vrouter"]):
                                 cmd = "inspec exec {0}{1} -t \"ssh://root@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
                             else:
                                 cmd = "inspec exec {0}{1} -t \"ssh://centos@{2}\" --key-files=\"~/.ssh/bitesize.key\"".format(inspecDir, test, ip)
