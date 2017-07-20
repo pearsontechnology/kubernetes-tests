@@ -15,7 +15,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 def test_stackstorm():
     stack_id = os.environ["STACK_ID"]
     hostYaml="/opt/testexecutor/hosts.yaml"
-    if (stack_id != 'b')
+    if (stack_id != 'b'):
         with open(hostYaml, 'r') as ymlfile1:  # hosts to test
             contents = yaml.load(ymlfile1)
             for host in contents['hosts']:
