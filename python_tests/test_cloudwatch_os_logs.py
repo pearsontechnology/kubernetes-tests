@@ -1,13 +1,6 @@
 #!/usr/bin/python
 import boto3
-import sys
 import os
-import time
-import json
-import argparse
-
-from botocore.exceptions import ClientError
-from datetime import datetime
 
 ##Verify cloudwatch log groups exist for audit and syslog
 def test_cloudwatch_os_log_groups_exist():
@@ -15,7 +8,7 @@ def test_cloudwatch_os_log_groups_exist():
     env = os.environ["ENVIRONMENT"]
     log_group_count = 0
     log_groups = logs.describe_log_groups()
-    for log in log_groups ['logGroups']:
+    for log in log_groups['logGroups']:
         if (env in log['logGroupName']) and log['logGroupName'].startswith("/bitesize"):
             if log['logGroupName'].endswith("/audit"):
                 log_group_count += 1
