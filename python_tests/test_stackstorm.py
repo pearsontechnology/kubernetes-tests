@@ -11,25 +11,25 @@ st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2Q
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-
 def test_stackstorm():
+    stack_id = os.environ["STACK_ID"]
     hostYaml="/opt/testexecutor/hosts.yaml"
-    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
-        contents = yaml.load(ymlfile1)
-        for host in contents['hosts']:
-            if ("stackstorm" in host['name']):
-                ip=host['value']
+    if (stack_id != 'b'):
+        with open(hostYaml, 'r') as ymlfile1:  # hosts to test
+            contents = yaml.load(ymlfile1)
+            for host in contents['hosts']:
+                if ("stackstorm" in host['name']):
+                    ip=host['value']
 
-                checkfill(ip)
+                    checkfill(ip)
 
-                errorCode,stderr=request_ns(ip)
-                assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+                    errorCode,stderr=request_ns(ip)
+                    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-                errorCode,stderr=create_project(ip)
-                assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+                    errorCode,stderr=create_project(ip)
+                    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-                cleanup(ip)
-
+                    cleanup(ip)
 
 def checkfill(st2host):
     errorCode,stderr = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
