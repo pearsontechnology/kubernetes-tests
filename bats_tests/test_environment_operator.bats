@@ -34,6 +34,7 @@ load helpers
 
   sleep 10 
 
-  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d '{"application":"front", "name":"front", "version":"1.0.1"}' environment-operator.nodejs-hello-world-app.prsn-dev.io/deploy
+  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d '{"application":"front", "name":"front", "version":"1.0.1"}' environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
+  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d '{"application":"back", "name":"back", "version":"1.0.1"}' environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
 
 }

@@ -4,13 +4,15 @@ metadata:
   name: environment-operator
   namespace: nodejs-hello-world-app
   labels:
-    ssl: "true"
+    ssl: "False"
 spec:
   rules:
   - host: environment-operator.nodejs-hello-world-app.prsn-dev.io
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: environment-operator 
           servicePort: 8080
+        path: /
+status:
+  loadBalancer: {}
