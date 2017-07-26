@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: environment-operator
+  namespace: nodejs-hello-world-app
+  labels:
+    ssl: "true"
+spec:
+  rules:
+  - host: environment-operator.nodejs-hello-world-app.prsn-dev.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: environment-operator 
+          servicePort: 8080
