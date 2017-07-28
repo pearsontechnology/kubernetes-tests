@@ -11,7 +11,6 @@ st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2Q
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-
 def test_stackstorm():
     stack_id = os.environ["STACK_ID"]
     hostYaml="/opt/testexecutor/hosts.yaml"
