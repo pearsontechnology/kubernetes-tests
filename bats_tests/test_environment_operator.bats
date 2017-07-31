@@ -4,6 +4,16 @@ set -o pipefail
 
 load helpers
 
+generate_post_data() {
+cat <<EOF
+{
+"application": "$NAME",
+"name": "$NAME",
+"version": "$VERSION"
+}
+EOF
+}
+
 
 @test "environment operator deploy of hello world test app" {
   assets_folder="/tmp/kubernetes-tests/test_assets"
@@ -34,7 +44,23 @@ load helpers
 
   sleep 10 
 
-  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d '{"application":"back", "name":"back", "version":"1.0.1-20170726210707"}' environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
-  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d '{"application":"front", "name":"front", "version":"1.0.1-20170726210857"}' environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
+  #Deploy Front End 
+  export VERSION=1.0.1-20170726210857
+  export NAME=front
+  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d "$(generate_post_data)" environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
+
+  #Verify deployed container version for front end
+  deployedVersion=`kubectl get pods --namespace=nodejs-hello-world-app -l name=front -o jsonpath="{.items[*].spec.containers[*].image}" | sed 's/.*://'`
+  [ "$deployedVersion" = "$VERSION" ]
+
+  #Deploy Back End
+  export NAME=back
+  export VERSION=1.0.1-20170726210707
+  curl -k -XPOST -H "Authentication: Bearer $AUTH_TOKEN" -H 'Content-Type: application/json' -d "$(generate_post_data)" environment-operator.nodejs-hello-world-app.svc.cluster.local/deploy
+  
+  #Verify deployed container version for back end
+  deployedVersion=`kubectl get pods --namespace=nodejs-hello-world-app -l name=back -o jsonpath="{.items[*].spec.containers[*].image}" | sed 's/.*://'`
+  
+  [ "$deployedVersion" = "$VERSION" ]
 
 }
