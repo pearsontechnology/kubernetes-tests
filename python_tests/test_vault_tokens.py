@@ -21,12 +21,12 @@ def run_script(command):
     errorCode = process.returncode
     return stdout,stderr,errorCode
 
-def create_test_ns():
+def test_create_test_ns():
     cmd="ssh -i ~/.ssh/bitesize.key centos@{0} 'sudo kubectl create ns tokens-test && sudo /usr/local/bin/add_vault_tokens.sh tokens-test'".format(master)
     stdout,stderr,errorCode=run_script(cmd)
     assert errorCode == 0
 
-def manually_verify_tokens():
+def test_manually_verify_tokens():
     global readTokenTtl
     global writeTokenTtl
     global readToken
@@ -50,7 +50,7 @@ def manually_verify_tokens():
     assert errorCode == 0
     writeTokenTtl=stdout.rstrip()
 
-def check_ns_tokens():
+def test_check_ns_tokens():
     global readTokenTtlNow
     global writeTokenTtlNow
     time.sleep(2)
@@ -66,7 +66,7 @@ def check_ns_tokens():
     assert int(readTokenTtl) / int(readTokenTtlNow) == 1
     assert int(readTokenTtl) / int(writeTokenTtlNow) == 1
 
-def regen_tokens():
+def test_regen_tokens():
     cmd="ssh -q centos@{0} \'sudo su - -c \"/usr/local/bin/renew_vault_tokens.sh regen tokens-test\"\'".format(master)
     stdout,stderr,errorCode=run_script(cmd)
     assert errorCode == 0
@@ -94,7 +94,7 @@ def regen_tokens():
     assert int(readTokenNewTtl) > int(readTokenTtlNow)
     assert int(writeTokenNewTtl) > int(writeTokenTtlNow)
 
-def delete_ns():
+def test_delete_ns():
     cmd="ssh -i ~/.ssh/bitesize.key centos@{0} 'sudo kubectl delete ns tokens-test'".format(master)
     stdout,stderr,errorCode=run_script(cmd)
     assert errorCode == 0
