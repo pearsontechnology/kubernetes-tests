@@ -15,7 +15,7 @@ readToken = ""
 writeToken = ""
 
 def run_ssh_command(command):
-    sshCommand="ssh -q -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} \"{1}\"".format(master,command)
+    sshCommand="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} \"{1}\"".format(master,command)
     #print(sshCommand)
     process = Popen(sshCommand, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
