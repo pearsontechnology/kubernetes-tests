@@ -14,7 +14,7 @@ RUN apt-get update --fix-missing && apt-get install -y python-dev jq git-all
 
 #Install Python Dependencies
 RUN pip install boto3 nose2 botocore python-dateutil PyYaml awscli jwt jmespath s3transfer docutils futures requests
-RUN pip install PyGithub==1.28 requests
+RUN pip install PyGithub==1.28 requests kubernetes
 
 #Install INSPEC
 RUN gem install inspec
