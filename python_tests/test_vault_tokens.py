@@ -4,7 +4,14 @@ import re
 import time
 from subprocess import Popen, PIPE
 
-master = os.environ["KUBERNETES_SERVICE_HOST"]
+try:
+    stack = os.environ["STACK_ID"]
+except:
+    stack = "a"
+
+env = os.environ["ENVIRONMENT"]
+master = "master-" + stack + "." + env + ".kube"
+
 uuidPattern = re.compile("[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}")
 
 readTokenTtl = 0
