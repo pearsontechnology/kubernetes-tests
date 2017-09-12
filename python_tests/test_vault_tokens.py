@@ -30,7 +30,7 @@ def run_ssh_command(command):
     return stdout,stderr,errorCode
 
 def test_a_create_test_ns():
-    cmd="sudo kubectl create ns tokens-test && sudo /usr/local/bin/add_vault_tokens.sh tokens-test"
+    cmd="sudo kubectl get ns tokens-test || sudo kubectl create ns tokens-test; sudo /usr/local/bin/add_vault_tokens.sh tokens-test"
     stdout,stderr,errorCode=run_ssh_command(cmd)
     assert errorCode == 0
 
