@@ -35,9 +35,9 @@ min_value_met () {
 }
 
 filtered_ingress_conf_eq_0 () {
-  ingresses=$1
+  pods=$1
   filter=$2
-  for pod in $ingresses; do
+  for pod in $pods; do
     lineCount=`kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "$filter" | wc -l`
     if [ $lineCount -gt 0 ]; then
       return 1
@@ -47,9 +47,9 @@ filtered_ingress_conf_eq_0 () {
 }
 
 filtered_ingress_conf_gt_0 () {
-  ingresses=$1
+  pods=$1
   filter=$2
-  for pod in $ingresses; do
+  for pod in $pods; do
     lineCount=`kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "$filter" | wc -l`
     if [ $lineCount -eq 0 ]; then
       return 1
@@ -59,9 +59,9 @@ filtered_ingress_conf_gt_0 () {
 }
 
 filtered_ingress_logs_gt_0 () {
-  ingresses=$1
+  pods=$1
   filter=$2
-  for pod in $ingresses; do
+  for pod in $pods; do
     lineCount=`kubectl logs --since=1m --namespace=kube-system $pod nginx-ingress | grep "$filter" | wc -l`
     if [ $lineCount -gt 0 ]; then
       return 1
