@@ -34,7 +34,7 @@ min_value_met () {
   fi
 }
 
-filtered_ingress_logs_eq_0 () {
+filtered_ingress_conf_eq_0 () {
   ingresses=$1
   filter=$2
   for pod in $ingresses; do
@@ -46,12 +46,24 @@ filtered_ingress_logs_eq_0 () {
   return 0
 }
 
-filtered_ingress_logs_gt_0 () {
+filtered_ingress_conf_gt_0 () {
   ingresses=$1
   filter=$2
   for pod in $ingresses; do
     lineCount=`kubectl exec -it --namespace=kube-system $pod -- cat /etc/nginx/nginx.conf | grep "$filter" | wc -l`
     if [ $lineCount -eq 0 ]; then
+      return 1
+    fi
+  done
+  return 0
+}
+
+filtered_ingress_logs_gt_0 () {
+  ingresses=$1
+  filter=$2
+  for pod in $ingresses; do
+    lineCount=`kubectl logs --since=1m --namespace=kube-system $pod nginx-ingress | grep "$filter" | wc -l`
+    if [ $lineCount -gt 0 ]; then
       return 1
     fi
   done
