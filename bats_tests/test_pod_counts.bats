@@ -51,7 +51,7 @@ load helpers
     skip "Not brain"
   fi
 
-  KEYCLOAK_DESIRED=`kubectl get deployment keycloak --namespace=keycloak -o jsonpath='{.spec.replicas}'`
-  KEYCLOAK_CURRENT=`kubectl get deployment keycloak --namespace=keycloak -o jsonpath='{.status.replicas}'`
+  KEYCLOAK_DESIRED=`kubectl get deployment kc --namespace=keycloak -o jsonpath='{.spec.replicas}'`
+  KEYCLOAK_CURRENT=`kubectl get deployment kc --namespace=keycloak -o jsonpath='{.status.replicas}'`
   values_equal $KEYCLOAK_DESIRED $KEYCLOAK_CURRENT
 }
