@@ -30,6 +30,14 @@ load helpers
   kubectl delete -f $assets_folder/ingress.nohost.yaml --namespace=kube-system
 }
 
+
+@test "keycloak ingress" {
+  if [ $BRAIN != "true" ]; then
+    skip "Not brain"
+  fi
+  kubectl get ing keycloak --namespace=keycloak --no-headers
+}
+
 #@test "es ingress" {
 #  kubectl get ing es-ingress --namespace=default --no-headers
 #}

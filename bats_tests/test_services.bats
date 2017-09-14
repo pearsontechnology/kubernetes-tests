@@ -41,3 +41,11 @@ load helpers
 @test "grafana service" {
   kubectl get svc grafana --namespace=default --no-headers
 }
+
+@test "keycloak service" {
+  if [ $BRAIN != "true" ]; then
+    skip "Not brain"
+  fi
+
+  kubectl get svc keycloak --namespace=keycloak --no-headers
+}

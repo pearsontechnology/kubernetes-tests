@@ -45,3 +45,13 @@ load helpers
   GRAFANA_CURRENT=`kubectl get rc grafana --namespace=default -o jsonpath='{.status.replicas}'`
   values_equal $GRAFANA_DESIRED $GRAFANA_CURRENT
 }
+
+@test "keycloak pods" {
+  if [ $BRAIN != "true" ]; then
+    skip "Not brain"
+  fi
+
+  KEYCLOAK_DESIRED=`kubectl get deployment keycloak --namespace=keycloak -o jsonpath='{.spec.replicas}'`
+  KEYCLOAK_CURRENT=`kubectl get deployment keycloak --namespace=keycloak -o jsonpath='{.status.replicas}'`
+  values_equal $KEYCLOAK_DESIRED $KEYCLOAK_CURRENT
+}
