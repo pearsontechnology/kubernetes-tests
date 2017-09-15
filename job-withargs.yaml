@@ -77,3 +77,5 @@ spec:
               fieldPath: status.podIP
         args: ["%%TYPE%%", "%%FILES%%"]
       restartPolicy: Never
+      nodeSelector:
+        role: minion
