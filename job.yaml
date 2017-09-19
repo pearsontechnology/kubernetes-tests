@@ -76,3 +76,5 @@ spec:
             fieldRef:
               fieldPath: status.podIP
       restartPolicy: Never
+      nodeSelector:
+        role: minion
