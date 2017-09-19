@@ -19,7 +19,7 @@ load helpers
     skip "Not brain"
   fi
 
-  curl -sk -o /dev/null -w "%{http_code}" https://auth.${ENVIRONMENT}.${DOMAIN}/auth/ | grep 200
+  curl -sk -o /dev/null -w "%{http_code}" https://auth-prelive.${ENVIRONMENT}.${DOMAIN}/auth/ | grep 200
 }
 
 @test "keycloak verify token access for kubernetes client" {
@@ -32,7 +32,7 @@ load helpers
   -d "password=${KUBE_PASS}" \
   -d grant_type=password \
   -d "client_id=kubernetes-${ENVIRONMENT}" \
-  https://auth.${ENVIRONMENT}.${DOMAIN}/auth/realms/master/protocol/openid-connect/token \
+  https://auth-prelive.${ENVIRONMENT}.${DOMAIN}/auth/realms/master/protocol/openid-connect/token \
   | jq .id_token | cut -d. -f2 | base64 -d | jq -r .groups[] | grep "operations"
 
 }
