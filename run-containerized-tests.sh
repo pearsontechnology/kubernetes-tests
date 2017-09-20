@@ -51,6 +51,7 @@ run_test(){
   fi
   sed -i '' -e "s/%%TIMEOUT%%/$TIMEOUT/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%ENVIRONMENT%%/$ENVIRONMENT/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%BRAIN%%/$BRAIN/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%REGION%%/$REGION/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%STACK_ID%%/$STACK_ID/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%COMPLETIONS%%/$COMPLETIONS/" job-temp.yaml > /dev/null 2>&1

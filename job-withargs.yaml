@@ -47,6 +47,8 @@ spec:
           value: "%%ANSIBLE_BRANCH%%"
         - name: ENVIRONMENT
           value: "%%ENVIRONMENT%%"
+        - name: BRAIN
+          value: "%%BRAIN%%"
         - name: GIT_REPO
           value: "git@github.com:pearsontechnology/kubernetes-tests.git"
         - name: GIT_BRANCH
