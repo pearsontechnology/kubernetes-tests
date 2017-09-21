@@ -55,10 +55,6 @@ describe service('irqbalance') do
   it { should be_enabled }
   it { should be_running }
 end
-describe service('NetworkManager') do
-  it { should be_enabled }
-  it { should be_running }
-end
 describe service('polkit') do
   it { should be_enabled }
   it { should be_running }
