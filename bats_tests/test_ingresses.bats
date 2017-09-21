@@ -21,14 +21,16 @@ load helpers
   kubectl create -f $assets_folder/ingress.hashost.yaml --namespace=kube-system
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
-  run filtered_ingress_logs_eq_0 $pods "ingress-host-test"
+  run filtered_ingress_conf_gt_0 $pods "ingress-host-test"
   kubectl delete -f $assets_folder/ingress.hashost.yaml --namespace=kube-system
   kubectl create -f $assets_folder/ingress.nohost.yaml --namespace=kube-system
   sleep 10
   pods="$(kubectl get pods --namespace=kube-system | grep -oEi 'nginx-ingress-[0-9a-z]+')"
-  run filtered_ingress_logs_gt_0 $pods "ingress-host-test"
+  run filtered_ingress_conf_eq_0 $pods "ingress-host-test"
+  run filtered_ingress_logs_gt_0 $pods "Ingress ingress-host-test failed validation: Host must be set"
   kubectl delete -f $assets_folder/ingress.nohost.yaml --namespace=kube-system
 }
+
 
 #@test "es ingress" {
 #  kubectl get ing es-ingress --namespace=default --no-headers
