@@ -4,56 +4,65 @@ import os
 import yaml
 from subprocess import Popen, PIPE
 
-def test_consul_read_and_write():
-    hostYaml="/opt/testexecutor/hosts.yaml"
-    env = os.environ["ENVIRONMENT"]
-    dom = os.environ["DOMAIN"]
-    token = os.environ["CONSUL_MASTER_TOKEN"]
-    with open(hostYaml, 'r') as ymlfile1:  # hosts to test
-        contents = yaml.load(ymlfile1)
-        hostYaml="/opt/testexecutor/hosts.yaml"
-        with open(hostYaml, 'r') as ymlfile1:  # hosts to test
-            contents = yaml.load(ymlfile1)
-            for host in contents['hosts']:
-                if ("master" in host['name']):
-                    ip=host['value']
+try:
+    stack = os.environ["STACK_ID"]
+except:
+    stack = "a"
 
-                    curlwrite = "curl -ks -X PUT -d 'test_value' https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2}".format(env,dom,token)
-                    cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlwrite)
-                    process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                    stdout, stderr = process.communicate()
-                    errorCode = process.returncode
-                    #print "Stdout:{0}".format(stdout)
-                    #print "Stderr:{0}".format(stderr)
-                    #print "errorCode:{0}".format(errorCode)
-                    assert stdout == "true"
+env = os.environ["ENVIRONMENT"]
+dom = os.environ["DOMAIN"]
+token = os.environ["CONSUL_MASTER_TOKEN"]
 
-                    curlread = "curl -ks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2} | jq '.[0].Value'".format(env,dom,token)
-                    cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlread)
-                    process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                    stdout, stderr = process.communicate()
-                    errorCode = process.returncode
-                    #print "Stdout:{0}".format(stdout)
-                    #print "Stderr:{0}".format(stderr)
-                    #print "errorCode:{0}".format(errorCode)
-                    assert errorCode == 0
+master = "master-" + stack + "." + env + ".kube"
 
-                    curlread = "curl -s http://consul.bitesize.{0}.{1}:8500/v1/kv/test/KEY1?token={2} | jq '.[0].Value'".format(env,dom,token)
-                    cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlread)
-                    process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                    stdout, stderr = process.communicate()
-                    errorCode = process.returncode
-                    #print "Stdout:{0}".format(stdout)
-                    #print "Stderr:{0}".format(stderr)
-                    #print "errorCode:{0}".format(errorCode)
-                    assert errorCode == 0
+testValue="test_value"
 
-                    curlaclcheck = "curl -fks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1".format(env,dom)
-                    cmd="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} '{1}'".format(ip,curlaclcheck)
-                    process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                    stdout, stderr = process.communicate()
-                    errorCode = process.returncode
-                    #print "Stdout:{0}".format(stdout)
-                    #print "Stderr:{0}".format(stderr)
-                    #print "errorCode:{0}".format(errorCode)
-                    assert errorCode != 0
+def run_ssh_command(command):
+    sshCommand="ssh -i ~/.ssh/bitesize.key -o StrictHostKeyChecking=no centos@{0} \"{1}\"".format(master,command)
+    #print(sshCommand)
+    process = Popen(sshCommand, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    stdout, stderr = process.communicate()
+    errorCode = process.returncode
+    #print "Stdout:{0}".format(stdout)
+    #print "Stderr:{0}".format(stderr)
+    #print "errorCode:{0}".format(errorCode)
+    return stdout,stderr,errorCode
+
+def test_a_consul_read_and_write():
+    cmd = "curl -ks -X PUT -d '{3}' https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2}".format(env,dom,token,testValue)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+    cmd = "curl -ks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2} | jq '.[0].Value'".format(env,dom,token)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+    cmd = "curl -s http://consul.bitesize.{0}.{1}:8500/v1/kv/test/KEY1?token={2} | jq '.[0].Value'".format(env,dom,token)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+    cmd = "curl -fks https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1".format(env,dom)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode != 0
+
+def test_b_backup_consul():
+    cmd="sudo su - -c \'/usr/local/bin/backup_consul.sh\'"
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+def test_c_delete_test_value():
+    cmd="curl -ks -X DELETE https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2}".format(env,dom,token)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+def test_d_restore_consul():
+    cmd="echo y | sudo su - -c \'/usr/local/bin/backup_consul.sh restore\'"
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+
+def test_e_read_test_value():
+    cmd="curl -ks -X GET https://consul.bitesize.{0}.{1}/v1/kv/test/KEY1?token={2} | jq -r \'.[].Value\' | base64 -d".format(env,dom,token)
+    stdout,stderr,errorCode=run_ssh_command(cmd)
+    assert errorCode == 0
+    testValueResp=stdout.rstrip()
+    assert testValueResp == testValue
