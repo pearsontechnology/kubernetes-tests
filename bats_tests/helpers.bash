@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Determine master's node name
+MASTER_NODE_NAME=`kubectl get nodes --no-headers --selector=role=master | awk '{ print $1 }'`
+
 # Should match minion_count in terraform.tfvars
 MINION_COUNT=${MINION_COUNT}
 

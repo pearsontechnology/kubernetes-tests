@@ -7,23 +7,23 @@ load helpers
 # Kubernetes Pods
 
 @test "kube-apiserver" {
-  kubectl get pod kube-apiserver-master-$STACK_ID.$ENVIRONMENT.kube --namespace=kube-system | grep Running
+  kubectl get pod kube-apiserver-$MASTER_NODE_NAME --namespace=kube-system | grep Running
 }
 
 @test "kube-controller-manager" {
-  kubectl get pod kube-controller-manager-master-$STACK_ID.$ENVIRONMENT.kube --namespace=kube-system | grep Running
+  kubectl get pod kube-controller-manager-$MASTER_NODE_NAME --namespace=kube-system | grep Running
 }
 
 @test "kube-podmaster" {
-  kubectl get pod kube-podmaster-master-$STACK_ID.$ENVIRONMENT.kube --namespace=kube-system | grep Running
+  kubectl get pod kube-podmaster-$MASTER_NODE_NAME --namespace=kube-system | grep Running
 }
 
 @test "kube-proxy master" {
-  kubectl get pod kube-proxy-master-$STACK_ID.$ENVIRONMENT.kube --namespace=kube-system | grep Running
+  kubectl get pod kube-proxy-$MASTER_NODE_NAME --namespace=kube-system | grep Running
 }
 
 @test "kube-scheduler" {
-  kubectl get pod kube-scheduler-master-$STACK_ID.$ENVIRONMENT.kube --namespace=kube-system | grep Running
+  kubectl get pod kube-scheduler-$MASTER_NODE_NAME --namespace=kube-system | grep Running
 }
 
 @test "fabric8" {
