@@ -7,13 +7,13 @@ load helpers
 # Infrastructure
 
 @test "master" {
-  kubectl get node master-$STACK_ID.$ENVIRONMENT.kube
+  kubectl get nodes --no-headers --selector=role=master | grep " Ready"
 }
 
 @test "minion" {
-  kubectl get nodes --no-headers | grep minion
+  kubectl get nodes --no-headers --selector=role=minion | grep " Ready"
 }
 
 @test "loadbalancer" {
-  kubectl get nodes --no-headers | grep loadbalancer
+  kubectl get nodes --no-headers --selector=role=loadbalancer | grep " Ready"
 }
