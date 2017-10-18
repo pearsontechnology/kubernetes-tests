@@ -32,7 +32,6 @@ load helpers
   -d "password=${KUBE_PASS}" \
   -d grant_type=password \
   -d "client_id=kubernetes-${ENVIRONMENT}" \
-  https://auth-prelive.${ENVIRONMENT}.${DOMAIN}/auth/realms/master/protocol/openid-connect/token \
-  | jq .access_token | cut -d. -f2 | base64 -d | jq -r ".groups" | grep "operations"
+  https://auth-prelive.${ENVIRONMENT}.${DOMAIN}/auth/realms/master/protocol/openid-connect/token | jq .access_token | cut -d. -f2 | base64 -d | jq -r ".groups" | grep "operations"
 
 }
