@@ -31,6 +31,8 @@ fi
 
 if [[ -z "${b}" ]]; then
   display_usage
+else
+  export TEST_BRANCH=${b}
 fi
 
 if [[ ! $(kubectl get secrets --namespace=test-runner | grep -i test-runner-secrets) ]]; then

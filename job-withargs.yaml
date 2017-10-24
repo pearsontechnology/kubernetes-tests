@@ -17,6 +17,8 @@ spec:
       labels:
         app: testexecutor
     spec:
+      nodeSelector:
+        role: minion
       volumes:
       - name: secret-volume
         secret:

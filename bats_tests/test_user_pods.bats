@@ -26,8 +26,8 @@ load helpers
   kubectl get pods --namespace=kube-system --no-headers | grep kube-dns | grep Running
 }
 
-@test "monitoring-heapster-v6" {
-  kubectl get pods --namespace=kube-system --no-headers | grep monitoring-heapster-v6 | grep Running
+@test "heapster-v1.2.0.1" {
+  kubectl get pods --namespace=kube-system --no-headers | grep heapster-v1.2.0.1 | grep Running
 }
 
 # # Test Elasticsearch cluster is up and green
