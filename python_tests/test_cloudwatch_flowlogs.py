@@ -14,21 +14,20 @@ def test_cloudwatch_flowlog_log_groups_exist():
     logs = boto3.client('logs', region_name=os.environ["REGION"])
     env = os.environ["ENVIRONMENT"]
     log_group_count = 0
-    log_groups = logs.describe_log_groups()
+    log_groups = logs.describe_log_groups(logGroupNamePrefix='/bitesize-' + env)
     for log in log_groups ['logGroups']:
-        if (env in log['logGroupName']) and log['logGroupName'].startswith("/bitesize"):
-            if log['logGroupName'].endswith("/flowlog"):
-                log_group_count += 1
+        if log['logGroupName'].endswith("/flowlog"):
+            log_group_count += 1
     assert log_group_count == 2   #should be a flowlog log group for the Bitesize VPC and another for the database VPC
 
 ##Verify flowlog log streams written to flowlog log group for Bitesize VPC
 def test_cloudwatch_flowlog_log_streams():
     logs = boto3.client('logs', region_name=os.environ["REGION"])
     env = os.environ["ENVIRONMENT"]
-    log_groups = logs.describe_log_groups()
+    log_groups = logs.describe_log_groups(logGroupNamePrefix='/bitesize-' + env)
     syslog_log_stream_count = 0
     for log_group in log_groups ['logGroups']:
-        if (env in log_group['logGroupName']) and log_group['logGroupName'].startswith("/bitesize") and log_group['logGroupName'].endswith("/flowlog"):
+        if (log_group['logGroupName'].endswith("/flowlog")):
             log_stream_data = logs.describe_log_streams(logGroupName = log_group['logGroupName'])
             for log_stream in log_stream_data['logStreams']:
                 if (log_stream['logStreamName'].startswith("eni")):
