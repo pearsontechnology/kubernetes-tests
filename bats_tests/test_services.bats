@@ -14,10 +14,6 @@ load helpers
   kubectl get svc bitesize-registry --namespace=default --no-headers
 }
 
-@test "fabric8 service" {
-  kubectl get svc fabric8 --namespace=default --no-headers
-}
-
 @test "kube-dns service" {
   kubectl get svc kube-dns --namespace=kube-system --no-headers
 }
