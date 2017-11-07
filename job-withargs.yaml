@@ -59,6 +59,8 @@ spec:
           value: "%%DEBUG%%"
         - name: KUBE_PASS
           value: "%%KUBE_PASS%%"
+        - name: ST2_PASSWORD
+          value: "%%ST2_PASSWORD%%"
         - name: KUBERNETES_VERSION
           value: "%%KUBERNETES_VERSION%%"
         - name: MINION_COUNT

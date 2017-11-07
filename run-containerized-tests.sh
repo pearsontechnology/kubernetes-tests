@@ -64,6 +64,8 @@ run_test(){
   sed -i '' -e "s/%%ANSIBLE_BRANCH%%/$ANSIBLE_BRANCH/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%DOMAIN%%/$DOMAIN/" job-temp.yaml > /dev/null 2>&1
   sed -i '' -e "s/%%CONSUL_MASTER_TOKEN%%/$CONSUL_MASTER_TOKEN/" job-temp.yaml > /dev/null 2>&1
+  sed -i '' -e "s/%%ST2_PASSWORD%%/$ST2_PASSWORD/" job-temp.yaml > /dev/null 2>&1
+  
   #Need to delete jobs
   if  [[ $(kubectl get jobs testexecutor --namespace=test-runner) ]]
   then  #Job already exists. Clean-up first

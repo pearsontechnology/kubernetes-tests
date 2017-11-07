@@ -8,7 +8,14 @@ import os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from uuid import UUID
 
-st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
+domain=os.environ["DOMAIN"]
+env = os.environ["ENVIRONMENT"]
+st2pass = os.environ["ST2_PASSWORD"]
+
+tokenurl = "https://stackstorm-prelive." + env + "." + domain + "/auth/v1/tokens"
+r = requests.post(tokenurl, auth=("st2admin", st2pass), verify=False)
+jdata = json.loads(r.text)
+st2apitoken = jdata['token']
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -152,7 +159,7 @@ def run_st2(st2host, data):
 
     executionsurl = "https://" + st2host + "/api/v1/executions/"
 
-    headers = {'St2-Api-Key': st2apikey, 'Content-Type': 'application/json'}
+    headers = {'X-Auth-Token': st2apitoken, 'Content-Type': 'application/json'}
 
     #print json.dumps(data, sort_keys=True, indent=2)
     #print json.dumps(headers, sort_keys=True, indent=2)
