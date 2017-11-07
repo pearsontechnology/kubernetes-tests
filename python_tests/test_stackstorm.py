@@ -6,6 +6,7 @@ import json
 import time
 import os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from uuid import UUID
 
 st2apikey = "NzlhYTFjNjE5ZGZhMTk1NGQxYzYzNzMwYTJjMTJiN2Y0OTg0MjJjMmJjMTNhNjdjY2QzNGUwZDU1NDQ5MmQ4MQ"
 
@@ -23,18 +24,32 @@ def test_stackstorm():
 
                     checkfill(ip)
 
-                    errorCode,stderr=request_ns(ip)
+                    errorCode,stderr,_=request_ns(ip)
                     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-                    errorCode,stderr=create_project(ip)
+                    errorCode,stderr,_=create_project(ip)
                     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
+
+                    check_keycloak_created(ip)
 
                     cleanup(ip)
 
+                    check_keycloak_deleted(ip)
+
+def check_keycloak_group(st2host, path):
+
+    data = {"action": "keycloak.get_group_id",
+            "user": None,
+            "parameters": {"path": path}
+           }
+
+    return run_st2(st2host, data)
+
+
 def checkfill(st2host):
-    errorCode,stderr = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
+    errorCode,stderr,_ = fill_consul(st2host, "bitesize/defaults/jenkinsversion", "3.4.35")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
-    errorCode,stderr = fill_consul(st2host, "bitesize/defaults/defaultdomain", "prsn-dev.io")
+    errorCode,stderr,_ = fill_consul(st2host, "bitesize/defaults/defaultdomain", "prsn-dev.io")
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
 def fill_consul(st2host, key, value):
@@ -58,12 +73,13 @@ def fill_consul(st2host, key, value):
 
 def request_ns(st2host):
 
+    env = os.environ["ENVIRONMENT"]
     data = {"action": "bitesize.request_ns",
             "user": None,
             "parameters": {
                 "email": "test@test.com",
                 "ns_list": ["dev"],
-                "project": "kubetests",
+                "project": env + "-kubetests",
                 "gitrepo": "git@github.com:AndyMoore111/test-app-v2.git",
                 "gitrequired": True}
            }
@@ -72,21 +88,18 @@ def request_ns(st2host):
 
 def cleanup(st2host):
 
-    errorCode,stderr=delete_ns(st2host, "kubetests-dev")
+    errorCode,stderr,_=delete_project(st2host)
     assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-    errorCode,stderr=delete_ns(st2host, "kubetests-jnk")
-    assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
-
-    #errorCode,stderr=delete_r53(st2host)
+    check_keycloak_deleted(st2host)
+    #errorCode,stderr,_=delete_r53(st2host)
     #assert errorCode != 0   #If Error Code is non-zere, then no Playbook/RECAP failures were found in the log
 
-def delete_ns(st2host, ns):
-    data = {"action": "kubernetes.deleteCoreV1Namespace",
-            "user": None,
+def delete_project(st2host):
+    env = os.environ["ENVIRONMENT"]
+    data = {"action": "bitesize.delete_project",
             "parameters": {
-                "body": {},
-                "name": ns}
+                "project": env + "-kubetests"}
            }
 
     return run_st2(st2host, data)
@@ -107,13 +120,33 @@ def delete_ns(st2host, ns):
 #    return run_st2(st2host, data)
 
 def create_project(st2host):
-
+    env = os.environ["ENVIRONMENT"]
     data = {"action": "bitesize.create_project",
             "parameters": {
-                "project": "kubetests"}
+                "project": env + "-kubetests"}
            }
 
     return run_st2(st2host, data)
+
+def check_keycloak_created(st2host):
+    env = os.environ["ENVIRONMENT"]
+    errorCode,stderr,result = check_keycloak_group(st2host, "/projects/" + env + "-kubetests")
+    assert errorCode != 0
+    try:
+      assert UUID(result, version=4)
+      return True
+    except:
+       return False
+
+def check_keycloak_deleted(st2host):
+    env = os.environ["ENVIRONMENT"]
+    errorCode,stderr,result = check_keycloak_group(st2host, "/projects/" + env + "-kubetests")
+    assert errorCode != 0
+    try:
+      assert not UUID(result, version=4)
+      return True
+    except:
+       return False
 
 def run_st2(st2host, data):
 
@@ -143,17 +176,21 @@ def run_st2(st2host, data):
         resp = requests.get(checkurl, headers=headers, verify=False)
         jdata = json.loads(resp.text)
         if jdata['status'] == "failed":
-            return (0, "failed creating")
+            return (0, "failed creating", None)
             for job in jdata['result']['tasks']:
                 if job['state'] == "failed":
-                    return (0, job['result']['stderr'])
+                    return (0, job['result']['stderr'], None)
 
         if runcount == 200:
-            return (0, "timed out 10 mins")
+            return (0, "timed out 10 mins", "timed out")
 
         if jdata['status'] == "succeeded":
-            return (1, "success")
+            try:
+                result = jdata['result']['result']
+            except:
+                result = jdata['status']
+            return (1, "success", result)
 
         time.sleep(10)
 
-    return (0, "unspecified error")
+    return (0, "unspecified error", "failed")
