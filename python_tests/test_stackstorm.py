@@ -84,7 +84,7 @@ def request_ns(st2host):
     data = {"action": "bitesize.request_ns",
             "user": None,
             "parameters": {
-                "email": "test@test.com",
+                "email": "no-reply@prsn-dev.io",
                 "ns_list": ["dev"],
                 "project": env + "-kubetests",
                 "gitrepo": "git@github.com:AndyMoore111/test-app-v2.git",
